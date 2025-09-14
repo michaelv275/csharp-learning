@@ -25,10 +25,11 @@ A sandbox repository for learning and experimenting with **C#** and the **.NET S
 
 ## Building
 
-1. **All projects**
+1. **All projects in the solution file**
   ```bash
     cd examples
 
+    # The .sln file contains references to all projects
     dotnet build   
   ```
 2. **specific projects**
@@ -36,6 +37,7 @@ A sandbox repository for learning and experimenting with **C#** and the **.NET S
     cd examples
 
     dotnet build [PATH_TO_PROJECT_FILE].csproj
+    # ex: dotnet build AccessLevels/AccessLevels.csproj 
   ```
 
 ## Running an example
