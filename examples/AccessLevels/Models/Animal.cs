@@ -43,6 +43,14 @@ namespace AccessLevels.Models
             return createdCat;
         }
 
+        public static Animal MakeDog(string humanGivenName, int animalAge, DateTime? birthdate = null)
+        {
+            Dog createdDog = new Dog(humanGivenName) { Age = animalAge };
+            createdDog._birthdate = birthdate ?? DateTime.Now.AddYears(-animalAge).AddDays(-(humanGivenName.Length * 3));
+
+            return createdDog;
+        }
+
         public virtual void Speak()
         {
             Console.WriteLine($"{Name} the {Species} says {Noise}");

@@ -1,0 +1,13 @@
+{
+  "appName": "Serialization",
+  "language": "English",
+  "hostURL": "console.dispel.test:3000",
+  "userIds": [1, 2, 6],
+  "adminUser": {
+    "id": 1,
+    "name": "Bob",
+    "email": "bobadmin@dispel.com",
+    "pronouns": ["monster", "truck", "gravedigga"],
+    "isAdmin": true
+  }
+}
