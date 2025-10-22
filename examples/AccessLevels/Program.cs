@@ -15,6 +15,7 @@ namespace AccessLevels
             _animals.Add(Animal.MakeCat("Whiskers", 3));
             _animals.Add(Animal.MakeCat("Whiskers_2", 2));
             _animals.Add(Animal.MakeCat("Mittens", 6, new DateTime(2019, 3, 15)));
+            _animals.Add(Animal.MakeDog("Ollie", 5, new DateTime(2019, 10, 21)));
 
             Console.WriteLine("What do the animals have to say?");
             foreach (var animal in _animals)
