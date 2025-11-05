@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 
 [Serializable]
-public class MutlChoiceQuesion
+public class MutlChoiceQuestion
 {
     [JsonProperty("type")]
     public string Type { get; set; }
