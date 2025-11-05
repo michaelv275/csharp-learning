@@ -4,8 +4,6 @@ namespace TriviaBot.Api
     {
         public TrueFalseQuestion()
         {
-            Type = "boolean";
         }
-
     }
 }
