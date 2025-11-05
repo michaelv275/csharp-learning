@@ -10,7 +10,7 @@ namespace TriviaBot.Api
             string jsonResponse = await client.CallApi();
 
             // Deserialize the JSON response into a list of questions
-            _ = JsonConvert.DeserializeObject<List<MultChoiceQuestion>>(jsonResponse);
+            //_ = JsonConvert.DeserializeObject<List<MultChoiceQuestion>>(jsonResponse);
         }
 
         private static string ParseErrorCode(OpenTriviaResponseCode errorCode)

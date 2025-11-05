@@ -5,7 +5,7 @@ using TriviaBot.Enums;
 namespace TriviaBot.Api
 {
     [Serializable]
-    internal class TriviaQuestion
+    public class TriviaQuestion
     {
         [JsonProperty("type")]
         public OpenTriviaQuestionType QuestionType { get; set; }
