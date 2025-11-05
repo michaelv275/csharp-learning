@@ -1,16 +1,16 @@
 ﻿using TriviaBot.Api;
-namespace TriviaBot;
-
-class Program
+namespace TriviaBot
 {
-    static async Task Main(string[] args)
+    class Program
     {
-        Console.WriteLine("Hello, World!");
+        static async Task Main(string[] args)
+        {
+            Console.WriteLine("Hello, World!");
+            ApiHelper requestClient = new ApiHelper();
+            
+            var test = await OpenTriviaApi.GetQuestions(requestClient, 5);
 
-        ApiHelper Api = new ApiHelper();
-
-        string response = await Api.CallApi();
-
-        Console.WriteLine($"Received response {response}");
+            Console.WriteLine($"Received response {test}");
+        }
     }
 }
