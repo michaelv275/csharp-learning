@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using TriviaBot.Enums;
 
 namespace TriviaBot.Api
@@ -7,8 +8,9 @@ namespace TriviaBot.Api
         public static async Task GetQuestions(ApiHelper client, int amount = 10)
         {
             string jsonResponse = await client.CallApi();
+
             // Deserialize the JSON response into a list of questions
-            var questions = JsonConvert.DeserializeObject<List<MultChoiceQuestion>>(jsonResponse);
+            _ = JsonConvert.DeserializeObject<List<MultChoiceQuestion>>(jsonResponse);
         }
 
         private static string ParseErrorCode(OpenTriviaResponseCode errorCode)
