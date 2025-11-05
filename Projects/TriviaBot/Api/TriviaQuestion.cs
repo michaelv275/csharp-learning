@@ -1,13 +1,14 @@
 using Newtonsoft.Json;
+using TriviaBot.Enums;
 
 
 namespace TriviaBot.Api
 {
     [Serializable]
-    public class TriviaQuestion
+    internal class TriviaQuestion
     {
         [JsonProperty("type")]
-        public string Type { get; set; }
+        public OpenTriviaQuestionType QuestionType { get; set; }
 
         [JsonProperty("difficulty")]
         public string Difficulty { get; set; }
