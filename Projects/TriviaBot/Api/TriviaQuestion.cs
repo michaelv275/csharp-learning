@@ -11,7 +11,7 @@ namespace TriviaBot.Api
         public OpenTriviaQuestionType QuestionType { get; set; }
 
         [JsonProperty("difficulty")]
-        public string Difficulty { get; set; }
+        public OpenTriviaQuestionDifficulty Difficulty { get; set; }
 
         [JsonProperty("category")]
         public string Category { get; set; }
