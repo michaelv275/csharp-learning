@@ -1,22 +1,31 @@
 using Newtonsoft.Json;
+using TriviaBot.Api.Models;
 using TriviaBot.Enums;
 
 namespace TriviaBot.Api
 {
     public class OpenTriviaApi
     {
-        public static async Task GetQuestions(ApiHelper client, int amount = 10)
+        public static async Task<OpenTriviaResponse> GetQuestions(ApiHelper client, int amount = 10)
         {
-            string jsonResponse = await client.CallApi();
+            string jsonResponse = await client.CallApi($"?amount={amount}&category=28&difficulty=hard");
 
             // Deserialize the JSON response into a list of questions
-            //_ = JsonConvert.DeserializeObject<List<MultChoiceQuestion>>(jsonResponse);
+            OpenTriviaResponse testResponse = JsonConvert.DeserializeObject<OpenTriviaResponse>(jsonResponse);
+
+            string errorMessage = ParseErrorCode(testResponse.ResponseCode);
+
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                throw new Exception(errorMessage);
+            }
+
+            return testResponse;
         }
 
         private static string ParseErrorCode(OpenTriviaResponseCode errorCode)
         {
-            string errorMessage = string.Empty;
-
+            string errorMessage;
             switch (errorCode)
             {
                 case OpenTriviaResponseCode.NoResults:
@@ -33,6 +42,9 @@ namespace TriviaBot.Api
                     break;
                 case OpenTriviaResponseCode.RateLimitExceeded:
                     errorMessage = "Rate Limit Exceeded: Too many requests have occurred. Each IP can only access the API once every 5 seconds.";
+                    break;
+                case OpenTriviaResponseCode.Success:
+                    errorMessage = string.Empty;
                     break;
                 default:
                     errorMessage = "Unknown Error Code.";

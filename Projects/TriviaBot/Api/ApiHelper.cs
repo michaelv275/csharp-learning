@@ -1,26 +1,28 @@
-using System.Net.Http;
-
 namespace TriviaBot.Api;
 
 public class ApiHelper
 {
     private HttpClient _caller { get; set; }
 
-    public ApiHelper()
+    public ApiHelper(string hostAddress)
     {
-        _caller = new HttpClient();
+        _caller = new HttpClient
+        {
+            BaseAddress = new Uri(hostAddress)
+        };
     }
 
-    public async Task<string> CallApi()
+    public async Task<string> CallApi(string urlParameters)
     {
         string responseBody = string.Empty;
 
         // Call asynchronous network methods in a try/catch block to handle exceptions.
         try
         {
-            using (HttpResponseMessage httpResponse = await _caller.GetAsync("https://opentdb.com/api.php?amount=10&category=28&difficulty=hard"))
+            Uri apiRequestUri = new Uri(_caller.BaseAddress + urlParameters);
+            using (HttpResponseMessage httpResponse = await _caller.GetAsync(apiRequestUri))
             {
-                httpResponse.EnsureSuccessStatusCode();
+                _ = httpResponse.EnsureSuccessStatusCode();
 
                 responseBody = await httpResponse.Content.ReadAsStringAsync();
             }
