@@ -3,11 +3,14 @@ using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-[JsonConverter(typeof(StringEnumConverter))]
-public enum OpenTriviaQuestionType
+namespace TriviaBot.Enums
 {
-    [EnumMember(Value = "multiple")]
-    MultiChoice,
-    [EnumMember(Value = "boolean")]
-    TrueFalse,
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum OpenTriviaQuestionType
+    {
+        [EnumMember(Value = "multiple")]
+        MultiChoice,
+        [EnumMember(Value = "boolean")]
+        TrueFalse,
+    }
 }
