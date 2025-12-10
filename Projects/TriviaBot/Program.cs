@@ -9,10 +9,16 @@ namespace TriviaBot
             Console.WriteLine("Hello, World!");
             ApiHelper requestClient = new ApiHelper("https://opentdb.com/api.php");
 
-            OpenTriviaResponse triviaQuestions = GetTriviaQuestions(requestClient);
+            OpenTriviaResponse? triviaQuestions = await GetTriviaQuestions(requestClient);
+
+            if (triviaQuestions is null)
+            {
+                Console.WriteLine("No trivia questions found. Exiting application.");
+                return;
+            }
         }
 
-        private static OpenTriviaResponse GetTriviaQuestions(ApiHelper client)
+        private static async Task<OpenTriviaResponse?> GetTriviaQuestions(ApiHelper client)
         {
             Console.WriteLine("How many trivia questions would you like to answer?");
             string numberOfQuestions = Console.ReadLine();
@@ -27,22 +33,21 @@ namespace TriviaBot
 
             try
             {
-                testResponse = await OpenTriviaApi.GetQuestions(requestClient, int.Parse(numberOfQuestions));
+                testResponse = await OpenTriviaApi.GetQuestions(client, int.Parse(numberOfQuestions));
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error getting trivia questions: {ex.Message}");
-                return;
+                return null;
             }
 
             if (testResponse is null || testResponse.Results.Count == 0)
             {
                 Console.WriteLine("Could not get questions from API");
-                return;
+                return null;
             }
 
             return testResponse;
         }
-
     }
 }
