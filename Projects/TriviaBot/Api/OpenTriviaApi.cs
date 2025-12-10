@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using TriviaBot.Api.Models;
 using TriviaBot.Enums;
+using TriviaBot.Common.Utilities;
 
 namespace TriviaBot.Api
 {
@@ -24,6 +25,12 @@ namespace TriviaBot.Api
 
             return testResponse;
         }
+
+        internal static List<TriviaCategory> GetCategories()
+        {
+            return EnumUtility.GetValues<TriviaCategory>().ToList();
+        }
+
 
         private static string ParseErrorCode(OpenTriviaResponseCode errorCode)
         {
