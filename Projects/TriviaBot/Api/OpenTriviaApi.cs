@@ -8,7 +8,7 @@ namespace TriviaBot.Api
     {
         public static async Task<OpenTriviaResponse> GetQuestions(ApiHelper client, int amount = 10, TriviaCategory category = TriviaCategory.GeneralKnowledge, OpenTriviaQuestionDifficulty difficulty = OpenTriviaQuestionDifficulty.Medium)
         {
-            string searchParams = $"?amount={amount}&category={(int)category}&difficulty={difficulty}";
+            string searchParams = $"?amount={amount}&category={(int)category}&difficulty={difficulty.ToString().ToLower()}";
 
             string jsonResponse = await client.CallApi(searchParams);
 
