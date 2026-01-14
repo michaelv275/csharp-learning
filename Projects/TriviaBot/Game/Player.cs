@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace TriviaBot.Api
+namespace TriviaBot.Game
 {
     public class Player
     {
