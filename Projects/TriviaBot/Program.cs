@@ -10,9 +10,9 @@ namespace TriviaBot
             Console.WriteLine("Hello, World!");
             ApiHelper requestClient = new ApiHelper("https://opentdb.com/api.php");
 
-            int cat = GetCategoryFromUser();
+            TriviaCategory questionCategory = GetCategoryFromUser();
 
-            OpenTriviaResponse? triviaQuestions = await GetTriviaQuestions(requestClient);
+            OpenTriviaResponse? triviaQuestions = await GetTriviaQuestions(requestClient, questionCategory);
 
             if (triviaQuestions is null)
             {
@@ -41,7 +41,7 @@ namespace TriviaBot
         {
             int numberOfPlayers = GetIntInputFromUser("How many players will be playing?");
 
-            List<Player> players = new List<Player>();
+            List<Player> players = [];
             for (int i = 0; i < numberOfPlayers; i++)
             {
                 Console.WriteLine($"Enter name for Player {i + 1}:");
@@ -53,12 +53,13 @@ namespace TriviaBot
             return players;
         }
 
-        private static int GetCategoryFromUser()
+        private static TriviaCategory GetCategoryFromUser()
         {
             List<TriviaCategory> categories = OpenTriviaApi.GetCategories();
 
             Console.WriteLine("Select a category by entering the corresponding number:");
-            List<int> categoryIndices = new List<int>();
+            List<int> categoryIndices = [];
+
             foreach (TriviaCategory category in categories)
             {
                 Console.WriteLine($"{(int)category}: {category}");
@@ -69,7 +70,7 @@ namespace TriviaBot
 
             if (categoryIndices.Contains(selectedNumber))
             {
-                return selectedNumber;
+                return (TriviaCategory)selectedNumber;
             }
             else
             {
@@ -78,14 +79,14 @@ namespace TriviaBot
             }
         }
 
-        private static async Task<OpenTriviaResponse?> GetTriviaQuestions(ApiHelper client)
+        private static async Task<OpenTriviaResponse?> GetTriviaQuestions(ApiHelper client, TriviaCategory category = TriviaCategory.GeneralKnowledge)
         {
             int numberOfQuestions = GetIntInputFromUser("How many trivia questions would you like to answer?");
 
             OpenTriviaResponse testResponse;
             try
             {
-                testResponse = await OpenTriviaApi.GetQuestions(client, numberOfQuestions);
+                testResponse = await OpenTriviaApi.GetQuestions(client, numberOfQuestions, category);
             }
             catch (Exception ex)
             {
