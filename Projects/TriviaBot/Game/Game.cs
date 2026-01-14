@@ -9,7 +9,7 @@ namespace TriviaBot.Game
         /**
         * Starts the trivia game by getting user preferences and fetching questions.
         */
-        public async Task<OpenTriviaResponse?> Start(ApiHelper requestClient)
+        public async Task Start(ApiHelper requestClient)
         {
             TriviaCategory questionCategory = GetCategoryFromUser();
 
@@ -18,10 +18,8 @@ namespace TriviaBot.Game
             if (triviaQuestions is null)
             {
                 Console.WriteLine("No trivia questions found. Exiting application.");
-                return null;
+                return;
             }
-
-            return triviaQuestions;
         }
 
         public void DisplayQuestion(List<TriviaQuestion> questions)

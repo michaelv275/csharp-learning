@@ -14,7 +14,7 @@ namespace TriviaBot
             TriviaGame triviaGame = new TriviaGame();
 
 
-            List<TriviaQuestion> questions = await triviaGame.Start(requestClient);
+            await triviaGame.Start(requestClient);
         }
     }
 }
