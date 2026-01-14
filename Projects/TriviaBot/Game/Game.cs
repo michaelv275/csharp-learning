@@ -22,10 +22,10 @@ namespace TriviaBot.Game
             }
         }
 
-        public void DisplayQuestion(List<TriviaQuestion> questions)
-        {
+        //public void DisplayQuestion(List<TriviaQuestion> questions)
+        //{
 
-        }
+        //}
         private static int GetIntInputFromUser(string prompt)
         {
             Console.WriteLine(prompt);
@@ -75,7 +75,16 @@ namespace TriviaBot.Game
 
             if (categoryIndices.Contains(selectedNumber))
             {
-                return (TriviaCategory)selectedNumber;
+                TriviaCategory userSelectedCategory = (TriviaCategory)selectedNumber;
+
+                if (userSelectedCategory == TriviaCategory.RandomCategory)
+                {
+                    Random rand = new Random();
+                    int randomIndex = rand.Next(categories.Count);
+                    userSelectedCategory = categories[randomIndex];
+                }
+
+                return userSelectedCategory;
             }
             else
             {

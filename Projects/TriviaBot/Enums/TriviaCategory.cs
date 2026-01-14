@@ -25,6 +25,7 @@
         EntertainmentComics = 29,
         ScienceGadgets = 30,
         EntertainmentJapaneseAnimeAndManga = 31,
-        EntertainmentCartoonAndAnimations = 32
+        EntertainmentCartoonAndAnimations = 32,
+        RandomCategory = 0
     }
 }

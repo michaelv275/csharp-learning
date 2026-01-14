@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 using TriviaBot.Api.Models;
-using TriviaBot.Enums;
 using TriviaBot.Common.Utilities;
+using TriviaBot.Enums;
 
 namespace TriviaBot.Api
 {
@@ -13,24 +13,22 @@ namespace TriviaBot.Api
 
             string jsonResponse = await client.CallApi(searchParams);
 
-            // Deserialize the JSON response into a list of questions
-            OpenTriviaResponse testResponse = JsonConvert.DeserializeObject<OpenTriviaResponse>(jsonResponse);
+            OpenTriviaResponse questionResponse = JsonConvert.DeserializeObject<OpenTriviaResponse>(jsonResponse);
 
-            string errorMessage = ParseErrorCode(testResponse.ResponseCode);
+            string errorMessage = ParseErrorCode(questionResponse.ResponseCode);
 
             if (!string.IsNullOrEmpty(errorMessage))
             {
                 throw new Exception(errorMessage);
             }
 
-            return testResponse;
+            return questionResponse;
         }
 
         internal static List<TriviaCategory> GetCategories()
         {
             return EnumUtility.GetValues<TriviaCategory>().ToList();
         }
-
 
         private static string ParseErrorCode(OpenTriviaResponseCode errorCode)
         {
