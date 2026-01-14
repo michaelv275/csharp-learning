@@ -1,6 +1,10 @@
+using TriviaBot.Api;
+using TriviaBot.Api.Models;
+using TriviaBot.Enums;
+
 namespace TriviaBot.Game
 {
-    public class Game
+    public class TriviaGame
     {
         public void Start()
         {
@@ -11,7 +15,7 @@ namespace TriviaBot.Game
         {
 
         }
-        public static int GetIntInputFromUser(string prompt)
+        public int GetIntInputFromUser(string prompt)
         {
             Console.WriteLine(prompt);
             bool isInputValid = int.TryParse(Console.ReadLine().Trim(), out int inputNumber);
@@ -27,7 +31,7 @@ namespace TriviaBot.Game
             }
         }
 
-        public static List<Player> CreatePlayers()
+        public List<Player> CreatePlayers()
         {
             int numberOfPlayers = GetIntInputFromUser("How many players will be playing?");
 
@@ -43,7 +47,7 @@ namespace TriviaBot.Game
             return players;
         }
 
-        public static TriviaCategory GetCategoryFromUser()
+        public TriviaCategory GetCategoryFromUser()
         {
             List<TriviaCategory> categories = OpenTriviaApi.GetCategories();
 
@@ -69,7 +73,7 @@ namespace TriviaBot.Game
             }
         }
 
-        public static async Task<OpenTriviaResponse?> GetTriviaQuestions(ApiHelper client, TriviaCategory category = TriviaCategory.GeneralKnowledge)
+        public async Task<OpenTriviaResponse?> GetTriviaQuestions(ApiHelper client, TriviaCategory category = TriviaCategory.GeneralKnowledge)
         {
             int numberOfQuestions = GetIntInputFromUser("How many trivia questions would you like to answer?");
 

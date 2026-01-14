@@ -1,6 +1,8 @@
 ﻿using TriviaBot.Api;
 using TriviaBot.Api.Models;
 using TriviaBot.Enums;
+using TriviaBot.Game;
+
 namespace TriviaBot
 {
     internal class Program
@@ -9,7 +11,7 @@ namespace TriviaBot
         {
             Console.WriteLine("Hello, World!");
             ApiHelper requestClient = new ApiHelper("https://opentdb.com/api.php");
-            Game triviaGame = new Game();
+            TriviaGame triviaGame = new TriviaGame();
 
             TriviaCategory questionCategory = triviaGame.GetCategoryFromUser();
 
