@@ -6,16 +6,29 @@ namespace TriviaBot.Game
 {
     public class TriviaGame
     {
-        public void Start()
+        /**
+        * Starts the trivia game by getting user preferences and fetching questions.
+        */
+        public async Task<OpenTriviaResponse?> Start(ApiHelper requestClient)
+        {
+            TriviaCategory questionCategory = GetCategoryFromUser();
+
+            OpenTriviaResponse? triviaQuestions = await GetTriviaQuestions(requestClient, questionCategory);
+
+            if (triviaQuestions is null)
+            {
+                Console.WriteLine("No trivia questions found. Exiting application.");
+                return null;
+            }
+
+            return triviaQuestions;
+        }
+
+        public void DisplayQuestion(List<TriviaQuestion> questions)
         {
 
         }
-
-        public void DisplayQuestion()
-        {
-
-        }
-        public int GetIntInputFromUser(string prompt)
+        private static int GetIntInputFromUser(string prompt)
         {
             Console.WriteLine(prompt);
             bool isInputValid = int.TryParse(Console.ReadLine().Trim(), out int inputNumber);
@@ -31,7 +44,7 @@ namespace TriviaBot.Game
             }
         }
 
-        public List<Player> CreatePlayers()
+        private static List<Player> CreatePlayers()
         {
             int numberOfPlayers = GetIntInputFromUser("How many players will be playing?");
 
@@ -47,7 +60,7 @@ namespace TriviaBot.Game
             return players;
         }
 
-        public TriviaCategory GetCategoryFromUser()
+        private static TriviaCategory GetCategoryFromUser()
         {
             List<TriviaCategory> categories = OpenTriviaApi.GetCategories();
 
@@ -73,7 +86,7 @@ namespace TriviaBot.Game
             }
         }
 
-        public async Task<OpenTriviaResponse?> GetTriviaQuestions(ApiHelper client, TriviaCategory category = TriviaCategory.GeneralKnowledge)
+        private static async Task<OpenTriviaResponse?> GetTriviaQuestions(ApiHelper client, TriviaCategory category = TriviaCategory.GeneralKnowledge)
         {
             int numberOfQuestions = GetIntInputFromUser("How many trivia questions would you like to answer?");
 

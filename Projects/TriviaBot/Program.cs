@@ -13,15 +13,8 @@ namespace TriviaBot
             ApiHelper requestClient = new ApiHelper("https://opentdb.com/api.php");
             TriviaGame triviaGame = new TriviaGame();
 
-            TriviaCategory questionCategory = triviaGame.GetCategoryFromUser();
 
-            OpenTriviaResponse? triviaQuestions = await triviaGame.GetTriviaQuestions(requestClient, questionCategory);
-
-            if (triviaQuestions is null)
-            {
-                Console.WriteLine("No trivia questions found. Exiting application.");
-                return;
-            }
+            List<TriviaQuestion> questions = await triviaGame.Start(requestClient);
         }
     }
 }
