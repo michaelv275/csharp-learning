@@ -7,7 +7,6 @@ namespace TriviaBot
     {
         private static async Task Main(string[] _1)
         {
-            Console.WriteLine("Hello, World!");
             ApiHelper requestClient = new ApiHelper("https://opentdb.com/api.php");
             TriviaGame triviaGame = new TriviaGame();
 

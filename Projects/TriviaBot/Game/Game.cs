@@ -68,7 +68,8 @@ namespace TriviaBot.Game
 
         private static void DisplayAnswerResults(Dictionary<string, string> playerAnswers, string correctAnswer)
         {
-            Console.WriteLine($"The correct answer was: {correctAnswer}");
+            Console.Write($"\nThe correct answer was:");
+            ConsoleUtility.WriteColored($" {correctAnswer}\n", ConsoleColor.Cyan);
             foreach (KeyValuePair<string, string> entry in playerAnswers)
             {
                 string playerName = entry.Key;
@@ -76,18 +77,18 @@ namespace TriviaBot.Game
 
                 if (playerAnswer == correctAnswer)
                 {
-                    Console.WriteLine($"{playerName} answered correctly!");
+                    ConsoleUtility.WriteColoredLine($"{playerName} answered correctly!", ConsoleColor.Green);
                 }
                 else
                 {
-                    Console.WriteLine($"{playerName} answered incorrectly. Their answer: {playerAnswer}");
+                    ConsoleUtility.WriteColoredLine($"{playerName} answered incorrectly. Their answer: {playerAnswer}", ConsoleColor.Red);
                 }
             }
         }
 
         private static int GetIntInputFromUser(string prompt)
         {
-            Console.Write($"\n{prompt} ");
+            ConsoleUtility.WriteColored($"\n{prompt} ", ConsoleColor.Yellow);
             bool isInputValid = int.TryParse(Console.ReadLine().Trim(), out int inputNumber);
 
             if (isInputValid && inputNumber > 0)
@@ -96,7 +97,7 @@ namespace TriviaBot.Game
             }
             else
             {
-                Console.WriteLine("Invalid input. Please enter a valid number.");
+                ConsoleUtility.WriteColoredLine("Invalid input. Please enter a valid number.", ConsoleColor.Red);
                 return GetIntInputFromUser(prompt);
             }
         }
@@ -118,7 +119,7 @@ namespace TriviaBot.Game
             List<Player> players = [];
             for (int i = 0; i < numberOfPlayers; i++)
             {
-                Console.WriteLine($"\nEnter name for Player {i + 1}: ");
+                ConsoleUtility.WriteColored($"\nEnter name for Player {i + 1}: ", ConsoleColor.Yellow);
                 string playerName = Console.ReadLine().Trim();
                 // Add player to list
                 players.Add(new Player(playerName));
@@ -166,7 +167,7 @@ namespace TriviaBot.Game
         {
             List<OpenTriviaQuestionDifficulty> difficulties = EnumUtility.GetValues<OpenTriviaQuestionDifficulty>().ToList();
 
-            Console.WriteLine("Select a difficulty by entering the corresponding number:");
+            ConsoleUtility.WriteColoredLine("Select a difficulty by entering the corresponding number:", ConsoleColor.Yellow);
             List<int> difficultyIndices = [];
 
             foreach (OpenTriviaQuestionDifficulty difficultyOption in difficulties)
@@ -185,7 +186,7 @@ namespace TriviaBot.Game
             }
             else
             {
-                Console.WriteLine("Invalid selection");
+                ConsoleUtility.WriteColoredLine("Invalid selection", ConsoleColor.Red);
                 return GetDifficultyFromUser();
             }
         }
