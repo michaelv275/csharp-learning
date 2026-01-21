@@ -41,22 +41,28 @@ namespace TriviaBot.Game
                     Console.WriteLine($"{i + 1}. {System.Net.WebUtility.HtmlDecode(allAnswers[i])}");
                 }
 
-                Dictionary<string, string> playerAnswers = GetPlayerAnswers(players, allAnswers);
+                Dictionary<Player, string> playerAnswers = GetPlayerAnswers(players, allAnswers);
 
                 DisplayAnswerResults(playerAnswers, question.CorrectAnswer);
             }
+
+            Console.WriteLine("\nFinal Scores:");
+            foreach (Player player in players)
+            {
+                Console.WriteLine($"{player.Name}: {player.Score} correct answer(s), {player.NumIncorrectAnswers} incorrect answer(s)");
+            }
         }
 
-        private static Dictionary<string, string> GetPlayerAnswers(List<Player> players, List<string> allAnswers)
+        private static Dictionary<Player, string> GetPlayerAnswers(List<Player> players, List<string> allAnswers)
         {
-            Dictionary<string, string> playerAnswers = [];
+            Dictionary<Player, string> playerAnswers = [];
             foreach (Player player in players)
             {
                 int playerAnswerIndex = GetIntInputFromUser($"{player.Name}, enter the number of your answer:") - 1;
 
                 if (playerAnswerIndex >= 0 && playerAnswerIndex < allAnswers.Count)
                 {
-                    playerAnswers[player.Name] = allAnswers[playerAnswerIndex];
+                    playerAnswers[player] = allAnswers[playerAnswerIndex];
                 }
                 else
                 {
@@ -67,20 +73,22 @@ namespace TriviaBot.Game
             return playerAnswers;
         }
 
-        private static void DisplayAnswerResults(Dictionary<string, string> playerAnswers, string correctAnswer)
+        private static void DisplayAnswerResults(Dictionary<Player, string> playerAnswers, string correctAnswer)
         {
             Console.WriteLine($"The correct answer was: {correctAnswer}");
-            foreach (KeyValuePair<string, string> entry in playerAnswers)
+            foreach (KeyValuePair<Player, string> entry in playerAnswers)
             {
-                string playerName = entry.Key;
+                string playerName = entry.Key.Name;
                 string playerAnswer = entry.Value;
 
                 if (playerAnswer == correctAnswer)
                 {
+                    entry.Key.Score++;
                     Console.WriteLine($"{playerName} answered correctly!");
                 }
                 else
                 {
+                    entry.Key.NumIncorrectAnswers++;
                     Console.WriteLine($"{playerName} answered incorrectly. Their answer: {playerAnswer}");
                 }
             }
