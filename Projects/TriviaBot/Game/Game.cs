@@ -14,8 +14,6 @@ namespace TriviaBot.Game
         {
             List<Player> players = CreatePlayers();
 
-            TriviaCategory questionCategory = GetCategoryFromUser();
-
             OpenTriviaResponse? triviaQuestions = await GetTriviaQuestions(requestClient);
 
             if (triviaQuestions is null)
@@ -44,14 +42,13 @@ namespace TriviaBot.Game
 
                 Dictionary<string, string> playerAnswers = GetPlayerAnswers(players, allAnswers);
 
-
                 DisplayAnswerResults(playerAnswers, question.CorrectAnswer);
             }
         }
 
         private static Dictionary<string, string> GetPlayerAnswers(List<Player> players, List<string> allAnswers)
         {
-            Dictionary<string, string> playerAnswers = new Dictionary<string, string>();
+            Dictionary<string, string> playerAnswers = [];
             foreach (Player player in players)
             {
                 int playerAnswerIndex = GetIntInputFromUser($"{player.Name}, enter the number of your answer:") - 1;
@@ -72,7 +69,7 @@ namespace TriviaBot.Game
         private static void DisplayAnswerResults(Dictionary<string, string> playerAnswers, string correctAnswer)
         {
             Console.WriteLine($"The correct answer was: {correctAnswer}");
-            foreach (var entry in playerAnswers)
+            foreach (KeyValuePair<string, string> entry in playerAnswers)
             {
                 string playerName = entry.Key;
                 string playerAnswer = entry.Value;
@@ -90,7 +87,7 @@ namespace TriviaBot.Game
 
         private static int GetIntInputFromUser(string prompt)
         {
-            Console.Write($"\n{prompt}");
+            Console.Write($"\n{prompt} ");
             bool isInputValid = int.TryParse(Console.ReadLine().Trim(), out int inputNumber);
 
             if (isInputValid && inputNumber > 0)
@@ -121,7 +118,7 @@ namespace TriviaBot.Game
             List<Player> players = [];
             for (int i = 0; i < numberOfPlayers; i++)
             {
-                Console.WriteLine($"Enter name for Player {i + 1}:");
+                Console.WriteLine($"\nEnter name for Player {i + 1}: ");
                 string playerName = Console.ReadLine().Trim();
                 // Add player to list
                 players.Add(new Player(playerName));
