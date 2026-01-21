@@ -1,5 +1,6 @@
 using TriviaBot.Api;
 using TriviaBot.Api.Models;
+using TriviaBot.Common.Utilities;
 using TriviaBot.Enums;
 
 namespace TriviaBot.Game
@@ -15,7 +16,7 @@ namespace TriviaBot.Game
 
             TriviaCategory questionCategory = GetCategoryFromUser();
 
-            OpenTriviaResponse? triviaQuestions = await GetTriviaQuestions(requestClient, questionCategory);
+            OpenTriviaResponse? triviaQuestions = await GetTriviaQuestions(requestClient);
 
             if (triviaQuestions is null)
             {
@@ -89,7 +90,7 @@ namespace TriviaBot.Game
 
         private static int GetIntInputFromUser(string prompt)
         {
-            Console.WriteLine(prompt);
+            Console.Write($"\n{prompt}");
             bool isInputValid = int.TryParse(Console.ReadLine().Trim(), out int inputNumber);
 
             if (isInputValid && inputNumber > 0)
@@ -101,6 +102,16 @@ namespace TriviaBot.Game
                 Console.WriteLine("Invalid input. Please enter a valid number.");
                 return GetIntInputFromUser(prompt);
             }
+        }
+
+        private static int GetIntInputFromUser(string prompt, int defaultValue)
+        {
+            Console.Write($"\n{prompt}");
+            bool isInputValid = int.TryParse(Console.ReadLine().Trim(), out int inputNumber);
+
+            return isInputValid && inputNumber > 0
+                ? inputNumber
+                : defaultValue;
         }
 
         private static List<Player> CreatePlayers()
@@ -123,7 +134,7 @@ namespace TriviaBot.Game
         {
             List<TriviaCategory> categories = OpenTriviaApi.GetCategories();
 
-            Console.WriteLine("Select a category by entering the corresponding number:");
+            Console.Write("Select a category by entering the corresponding number:");
             List<int> categoryIndices = [];
 
             foreach (TriviaCategory category in categories)
@@ -132,7 +143,7 @@ namespace TriviaBot.Game
                 categoryIndices.Add((int)category);
             }
 
-            int selectedNumber = GetIntInputFromUser("Enter category number:");
+            int selectedNumber = GetIntInputFromUser("Enter category number (Default is General Knowledge):", (int)TriviaCategory.GeneralKnowledge);
 
             if (categoryIndices.Contains(selectedNumber))
             {
@@ -154,14 +165,44 @@ namespace TriviaBot.Game
             }
         }
 
-        private static async Task<OpenTriviaResponse?> GetTriviaQuestions(ApiHelper client, TriviaCategory category = TriviaCategory.GeneralKnowledge)
+        private static OpenTriviaQuestionDifficulty GetDifficultyFromUser()
+        {
+            List<OpenTriviaQuestionDifficulty> difficulties = EnumUtility.GetValues<OpenTriviaQuestionDifficulty>().ToList();
+
+            Console.WriteLine("Select a difficulty by entering the corresponding number:");
+            List<int> difficultyIndices = [];
+
+            foreach (OpenTriviaQuestionDifficulty difficultyOption in difficulties)
+            {
+                Console.WriteLine($"{(int)difficultyOption}: {difficultyOption}");
+                difficultyIndices.Add((int)difficultyOption);
+            }
+
+            int selectedNumber = GetIntInputFromUser("Enter difficulty number (Default is Easy):", (int)OpenTriviaQuestionDifficulty.Easy);
+
+            if (difficultyIndices.Contains(selectedNumber))
+            {
+                OpenTriviaQuestionDifficulty userSelectedCategory = (OpenTriviaQuestionDifficulty)selectedNumber;
+
+                return userSelectedCategory;
+            }
+            else
+            {
+                Console.WriteLine("Invalid selection");
+                return GetDifficultyFromUser();
+            }
+        }
+
+        private static async Task<OpenTriviaResponse?> GetTriviaQuestions(ApiHelper client)
         {
             int numberOfQuestions = GetIntInputFromUser("How many trivia questions would you like to answer?");
+            OpenTriviaQuestionDifficulty userDifficulty = GetDifficultyFromUser();
+            TriviaCategory category = GetCategoryFromUser();
 
             OpenTriviaResponse questionsResult;
             try
             {
-                questionsResult = await OpenTriviaApi.GetQuestions(client, numberOfQuestions, category);
+                questionsResult = await OpenTriviaApi.GetQuestions(client, numberOfQuestions, category, userDifficulty);
             }
             catch (Exception ex)
             {
