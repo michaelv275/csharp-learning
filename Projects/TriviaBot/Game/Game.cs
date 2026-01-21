@@ -29,15 +29,16 @@ namespace TriviaBot.Game
         {
             foreach (TriviaQuestion question in questions)
             {
-                Console.WriteLine($"Question: {question.Question}");
+                string escapedQuestion = System.Net.WebUtility.HtmlDecode(question.Question);
+                Console.WriteLine($"Question: {escapedQuestion}");
                 List<string> allAnswers = new List<string>(question.IncorrectAnswers)
                 {
-                    question.CorrectAnswer
+                    question.CorrectAnswer,
                 }.OrderBy(a => Guid.NewGuid()).ToList(); // Shuffle answers
 
                 for (int i = 0; i < allAnswers.Count; i++)
                 {
-                    Console.WriteLine($"{i + 1}. {allAnswers[i]}");
+                    Console.WriteLine($"{i + 1}. {System.Net.WebUtility.HtmlDecode(allAnswers[i])}");
                 }
 
                 Dictionary<string, string> playerAnswers = GetPlayerAnswers(players, allAnswers);
