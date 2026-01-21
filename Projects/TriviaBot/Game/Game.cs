@@ -11,6 +11,8 @@ namespace TriviaBot.Game
         */
         public async Task Start(ApiHelper requestClient)
         {
+            List<Player> players = CreatePlayers();
+
             TriviaCategory questionCategory = GetCategoryFromUser();
 
             OpenTriviaResponse? triviaQuestions = await GetTriviaQuestions(requestClient, questionCategory);
@@ -20,12 +22,71 @@ namespace TriviaBot.Game
                 Console.WriteLine("No trivia questions found. Exiting application.");
                 return;
             }
+
+            DisplayQuestions(triviaQuestions.Results, players);
         }
 
-        //public void DisplayQuestion(List<TriviaQuestion> questions)
-        //{
+        public void DisplayQuestions(List<TriviaQuestion> questions, List<Player> players)
+        {
+            foreach (TriviaQuestion question in questions)
+            {
+                Console.WriteLine($"Question: {question.Question}");
+                List<string> allAnswers = new List<string>(question.IncorrectAnswers)
+                {
+                    question.CorrectAnswer
+                }.OrderBy(a => Guid.NewGuid()).ToList(); // Shuffle answers
 
-        //}
+                for (int i = 0; i < allAnswers.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1}. {allAnswers[i]}");
+                }
+
+                Dictionary<string, string> playerAnswers = GetPlayerAnswers(players, allAnswers);
+
+
+                DisplayAnswerResults(playerAnswers, question.CorrectAnswer);
+            }
+        }
+
+        private static Dictionary<string, string> GetPlayerAnswers(List<Player> players, List<string> allAnswers)
+        {
+            Dictionary<string, string> playerAnswers = new Dictionary<string, string>();
+            foreach (Player player in players)
+            {
+                int playerAnswerIndex = GetIntInputFromUser($"{player.Name}, enter the number of your answer:") - 1;
+
+                if (playerAnswerIndex >= 0 && playerAnswerIndex < allAnswers.Count)
+                {
+                    playerAnswers[player.Name] = allAnswers[playerAnswerIndex];
+                }
+                else
+                {
+                    Console.WriteLine("Invalid answer selection.");
+                }
+            }
+
+            return playerAnswers;
+        }
+
+        private static void DisplayAnswerResults(Dictionary<string, string> playerAnswers, string correctAnswer)
+        {
+            Console.WriteLine($"The correct answer was: {correctAnswer}");
+            foreach (var entry in playerAnswers)
+            {
+                string playerName = entry.Key;
+                string playerAnswer = entry.Value;
+
+                if (playerAnswer == correctAnswer)
+                {
+                    Console.WriteLine($"{playerName} answered correctly!");
+                }
+                else
+                {
+                    Console.WriteLine($"{playerName} answered incorrectly. Their answer: {playerAnswer}");
+                }
+            }
+        }
+
         private static int GetIntInputFromUser(string prompt)
         {
             Console.WriteLine(prompt);
