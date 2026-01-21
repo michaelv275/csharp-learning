@@ -77,7 +77,7 @@ namespace TriviaBot.Game
         {
             Console.Write($"\nThe correct answer was:");
             ConsoleUtility.WriteColored($" {correctAnswer}\n", ConsoleColor.Cyan);
-            foreach (KeyValuePair<string, string> entry in playerAnswers)
+            foreach (KeyValuePair<Player, string> entry in playerAnswers)
             {
                 string playerName = entry.Key.Name;
                 string playerAnswer = entry.Value;
@@ -89,7 +89,7 @@ namespace TriviaBot.Game
                 }
                 else
                 {
-                    
+
                     entry.Key.NumIncorrectAnswers++;
                     ConsoleUtility.WriteColoredLine($"{playerName} answered incorrectly. Their answer: {playerAnswer}", ConsoleColor.Red);
                 }
