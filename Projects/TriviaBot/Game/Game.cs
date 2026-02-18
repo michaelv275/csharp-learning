@@ -68,9 +68,24 @@ namespace TriviaBot.Game
             }
 
             ConsoleUtility.WriteColoredLine("\nFinal Scores:", ConsoleColor.Yellow);
-            foreach (Player player in players)
+
+            int topScore = players.Max(p => p.Score);
+            int worstScore = players.Min(p => p.Score);
+
+            foreach (Player player in players.OrderByDescending(p => p.Score).ToList())
             {
-                Console.WriteLine($"{player.Name}: {player.Score} correct answer(s), {player.NumIncorrectAnswers} incorrect answer(s)");
+                if (player.Score == topScore)
+                {
+                    ConsoleUtility.WriteColoredLine($"{player.Name}: {player.Score} correct answer(s), {player.NumIncorrectAnswers} incorrect answer(s)", ConsoleColor.Green);
+                }
+                else if (player.Score == worstScore)
+                {
+                    ConsoleUtility.WriteColoredLine($"{player.Name}: {player.Score} correct answer(s), {player.NumIncorrectAnswers} incorrect answer(s)", ConsoleColor.Red);
+                }
+                else
+                {
+                    Console.WriteLine($"{player.Name}: {player.Score} correct answer(s), {player.NumIncorrectAnswers} incorrect answer(s)");
+                }
             }
         }
 
