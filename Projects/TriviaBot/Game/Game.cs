@@ -165,6 +165,7 @@ namespace TriviaBot.Game
             else if (!wasAnyCorrect)
             {
                 ConsoleUtility.WriteColoredLine("\nNo one answered correctly. Bad job :(", ConsoleColor.Red);
+                questionResponses.Keys.ToList().ForEach(player => player.NumIncorrectAnswers++);
             }
             else
             {
@@ -186,6 +187,10 @@ namespace TriviaBot.Game
 
                         correctPlayers += playerName;
                         responder.Score++;
+                    }
+                    else
+                    {
+                        responder.NumIncorrectAnswers++;
                     }
                 }
 
