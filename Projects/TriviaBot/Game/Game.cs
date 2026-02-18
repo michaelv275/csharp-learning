@@ -58,7 +58,7 @@ namespace TriviaBot.Game
             Dictionary<Player, string> playerAnswers = [];
             foreach (Player player in players)
             {
-                int playerAnswerIndex = GetIntInputFromUser($"{player.Name}, enter the number of your answer:") - 1;
+                int playerAnswerIndex = GetSecureIntInputFromUser($"{player.Name}, enter the number of your answer:") - 1;
 
                 if (playerAnswerIndex >= 0 && playerAnswerIndex < allAnswers.Count)
                 {
@@ -109,6 +109,22 @@ namespace TriviaBot.Game
             {
                 ConsoleUtility.WriteColoredLine("Invalid input. Please enter a valid number.", ConsoleColor.Red);
                 return GetIntInputFromUser(prompt);
+            }
+        }
+
+        private static int GetSecureIntInputFromUser(string prompt)
+        {
+            ConsoleUtility.WriteColored($"\n{prompt} ", ConsoleColor.Yellow);
+            bool isInputValid = int.TryParse(ConsoleUtility.GetSecureUserInput(), out int inputNumber);
+
+            if (isInputValid && inputNumber > 0)
+            {
+                return inputNumber;
+            }
+            else
+            {
+                ConsoleUtility.WriteColoredLine("Invalid input. Please enter a valid number.", ConsoleColor.Red);
+                return GetSecureIntInputFromUser(prompt);
             }
         }
 
