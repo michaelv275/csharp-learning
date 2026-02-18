@@ -14,15 +14,32 @@ namespace TriviaBot.Game
         {
             List<Player> players = CreatePlayers();
 
-            OpenTriviaResponse? triviaQuestions = await GetTriviaQuestions(requestClient);
-
-            if (triviaQuestions is null)
+            while (true)
             {
-                Console.WriteLine("No trivia questions found. Exiting application.");
-                return;
-            }
+                OpenTriviaResponse? triviaQuestions = await GetTriviaQuestions(requestClient);
 
-            DisplayQuestions(triviaQuestions.Results, players);
+                if (triviaQuestions is null)
+                {
+                    Console.WriteLine("No trivia questions found. Exiting application.");
+                    return;
+                }
+
+                DisplayQuestions(triviaQuestions.Results, players);
+
+                if (!PlayAgainPrompt())
+                {
+                    Console.WriteLine("Thanks for playing!");
+                    return;
+                }
+
+                string choice = NewGameOrContinueWithExistingPrompt();
+                Console.Clear();
+
+                if (choice == "new")
+                {
+                    players = CreatePlayers();
+                }
+            }
         }
 
         public void DisplayQuestions(List<TriviaQuestion> questions, List<Player> players)
@@ -57,6 +74,46 @@ namespace TriviaBot.Game
             }
         }
 
+        private static bool PlayAgainPrompt()
+        {
+            ConsoleUtility.WriteColored("\nWould you like to play again? (y/n): ", ConsoleColor.Yellow);
+            string userInput = Console.ReadLine().Trim().ToLower();
+
+            if (userInput == "y" || userInput == "yes")
+            {
+                return true;
+            }
+            else if (userInput == "n" || userInput == "no")
+            {
+                return false;
+            }
+            else
+            {
+                ConsoleUtility.WriteColoredLine("Invalid input. Please enter 'y' or 'n'.", ConsoleColor.Red);
+                return PlayAgainPrompt();
+            }
+        }
+
+        private static string NewGameOrContinueWithExistingPrompt()
+        {
+            ConsoleUtility.WriteColored("\nWould you like to (1) start a new game or (2) continue with the existing one? (1/2): ", ConsoleColor.Yellow);
+            string userInput = Console.ReadLine().Trim().ToLower();
+
+            if (userInput == "1")
+            {
+                return "new";
+            }
+            else if (userInput == "2")
+            {
+                return "continue";
+            }
+            else
+            {
+                ConsoleUtility.WriteColoredLine("Invalid input. Please enter '1' or '2'.", ConsoleColor.Red);
+                return NewGameOrContinueWithExistingPrompt();
+            }
+        }
+
         private static Dictionary<Player, string> GetPlayerAnswers(List<Player> players, List<string> allAnswers)
         {
             Dictionary<Player, string> playerAnswers = [];
@@ -80,7 +137,7 @@ namespace TriviaBot.Game
         private static void ScoreQuestionAndDisplayResult(ref Dictionary<Player, string> playerAnswers, string correctAnswer)
         {
             Console.Write($"\nThe correct answer was: ");
-            ConsoleUtility.WriteColored($"{correctAnswer}", ConsoleColor.Cyan);
+            ConsoleUtility.WriteColored($"{System.Net.WebUtility.HtmlDecode(correctAnswer)}", ConsoleColor.Cyan);
 
             bool wasAnyCorrect = playerAnswers.Values.Any(answer => answer == correctAnswer);
             bool wereAllCorrect = playerAnswers.Values.All(answer => answer == correctAnswer);
