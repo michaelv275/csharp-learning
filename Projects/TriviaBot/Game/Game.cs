@@ -77,18 +77,18 @@ namespace TriviaBot.Game
             return playerAnswers;
         }
 
-        private static void ScoreQuestionAndDisplayResult(ref Dictionary<Player, string> playerAnswers, string correctAnswer)
+        private static void ScoreQuestionAndDisplayResult(ref Dictionary<Player, string> questionResponses, string correctAnswer)
         {
             Console.Write($"\nThe correct answer was: ");
             ConsoleUtility.WriteColored($"{correctAnswer}", ConsoleColor.Cyan);
 
-            bool wasAnyCorrect = playerAnswers.Values.Any(answer => answer == correctAnswer);
-            bool wereAllCorrect = playerAnswers.Values.All(answer => answer == correctAnswer);
+            bool wasAnyCorrect = questionResponses.Values.Any(answer => answer == correctAnswer);
+            bool wereAllCorrect = questionResponses.Values.All(answer => answer == correctAnswer);
 
             if (wereAllCorrect)
             {
                 ConsoleUtility.WriteColoredLine("\nEveryone answered correctly! Great job!", ConsoleColor.Green);
-                playerAnswers.Keys.ToList().ForEach(player => player.Score++);
+                questionResponses.Keys.ToList().ForEach(player => player.Score++);
             }
             else if (!wasAnyCorrect)
             {
@@ -98,12 +98,12 @@ namespace TriviaBot.Game
             {
                 string correctPlayers = string.Empty;
 
-                for (int i = 0; i < playerAnswers.Count; i++)
+                for (int i = 0; i < questionResponses.Count; i++)
                 {
-                    KeyValuePair<Player, string> entry = playerAnswers.ElementAt(i);
+                    Player responder = questionResponses.ElementAt(i).Key;
+                    string playerAnswer = questionResponses.ElementAt(i).Value;
 
-                    string playerName = entry.Key.Name;
-                    string playerAnswer = entry.Value;
+                    string playerName = responder.Name;
 
                     if (playerAnswer == correctAnswer)
                     {
@@ -113,7 +113,7 @@ namespace TriviaBot.Game
                         }
 
                         correctPlayers += playerName;
-                        entry.Key.Score++;
+                        responder.Score++;
                     }
                 }
 
