@@ -235,7 +235,7 @@ namespace TriviaBot.Game
             ConsoleUtility.WriteColored($"\n{prompt}", ConsoleColor.Yellow);
             bool isInputValid = int.TryParse(Console.ReadLine().Trim(), out int inputNumber);
 
-            return isInputValid && inputNumber > 0
+            return isInputValid && inputNumber >= 0
                 ? inputNumber
                 : defaultValue;
         }
