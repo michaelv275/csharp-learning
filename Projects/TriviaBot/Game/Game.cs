@@ -282,6 +282,9 @@ namespace TriviaBot.Game
                     Random rand = new Random();
                     int randomIndex = rand.Next(categories.Count);
                     userSelectedCategory = categories[randomIndex];
+
+                    Console.Write($"Random chose: ");
+                    ConsoleUtility.WriteColoredLine($"{userSelectedCategory}", ConsoleColor.Cyan);
                 }
 
                 return userSelectedCategory;
