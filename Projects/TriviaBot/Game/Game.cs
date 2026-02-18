@@ -47,10 +47,10 @@ namespace TriviaBot.Game
 
                 Dictionary<Player, string> playerAnswers = GetPlayerAnswers(players, allAnswers);
 
-                DisplayAnswerResults(playerAnswers, question.CorrectAnswer);
+                ScoreQuestionAndDisplayResult(ref playerAnswers, question.CorrectAnswer);
             }
 
-            Console.WriteLine("\nFinal Scores:");
+            ConsoleUtility.WriteColoredLine("\nFinal Scores:", ConsoleColor.Yellow);
             foreach (Player player in players)
             {
                 Console.WriteLine($"{player.Name}: {player.Score} correct answer(s), {player.NumIncorrectAnswers} incorrect answer(s)");
@@ -77,7 +77,7 @@ namespace TriviaBot.Game
             return playerAnswers;
         }
 
-        private static void DisplayAnswerResults(Dictionary<Player, string> playerAnswers, string correctAnswer)
+        private static void ScoreQuestionAndDisplayResult(ref Dictionary<Player, string> playerAnswers, string correctAnswer)
         {
             Console.Write($"\nThe correct answer was: ");
             ConsoleUtility.WriteColored($"{correctAnswer}", ConsoleColor.Cyan);
@@ -88,6 +88,7 @@ namespace TriviaBot.Game
             if (wereAllCorrect)
             {
                 ConsoleUtility.WriteColoredLine("\nEveryone answered correctly! Great job!", ConsoleColor.Green);
+                playerAnswers.Keys.ToList().ForEach(player => player.Score++);
             }
             else if (!wasAnyCorrect)
             {
@@ -97,8 +98,10 @@ namespace TriviaBot.Game
             {
                 string correctPlayers = string.Empty;
 
-                foreach (KeyValuePair<Player, string> entry in playerAnswers)
+                for (int i = 0; i < playerAnswers.Count; i++)
                 {
+                    KeyValuePair<Player, string> entry = playerAnswers.ElementAt(i);
+
                     string playerName = entry.Key.Name;
                     string playerAnswer = entry.Value;
 
