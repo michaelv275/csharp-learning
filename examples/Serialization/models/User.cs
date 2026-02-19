@@ -17,7 +17,27 @@ public class User
 
     [JsonProperty("isAdmin")]
     public bool IsAdmin { get; set; }
-    
+
     [JsonConstructor]
     public User() { }
+    
+    public static List<User> CreateDummies(int numDummies)
+    {
+        List<User> dummyUsers = new List<User>();
+        for (int i = 0; i < numDummies; i++)
+        {
+            User user = new User()
+            {
+                Id = i + 1,
+                Email = "dummy1@dispel.com",
+                IsAdmin = true,
+                Name = $"Dummy {i + 1}",
+                Pronouns = new List<string>() { "she/him" }
+            };
+
+            dummyUsers.Add(user);
+        }
+
+        return dummyUsers;
+    }
 }
