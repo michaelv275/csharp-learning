@@ -16,13 +16,8 @@ namespace AccessLevels.Models
             private set => _age = value;
         }
         public DateTime? Birthdate
-        {
             //Both of these are acceptable ways to write a property that has a getter and private setter
-            get
-            {
-                return _birthdate;
-            }
-        }
+            => _birthdate;
 
         public Animal()
         {
@@ -36,19 +31,13 @@ namespace AccessLevels.Models
         }
         public static Animal MakeCat(string humanGivenName, int animalAge, DateTime? birthdate = null)
         {
-            Cat createdCat = new Cat(humanGivenName) { Age = animalAge };
-            //If no birthdate given, create a random one based on the age given and name for fun.
-            createdCat._birthdate = birthdate ?? DateTime.Now.AddYears(-animalAge).AddDays(-(humanGivenName.Length * 3));
+            Cat createdCat = new Cat(humanGivenName)
+            {
+                Age = animalAge,             //If no birthdate given, create a random one based on the age given and name for fun.
+                _birthdate = birthdate ?? DateTime.Now.AddYears(-animalAge).AddDays(-(humanGivenName.Length * 3))
+            };
 
             return createdCat;
-        }
-
-        public static Animal MakeDog(string humanGivenName, int animalAge, DateTime? birthdate = null)
-        {
-            Dog createdDog = new Dog(humanGivenName) { Age = animalAge };
-            createdDog._birthdate = birthdate ?? DateTime.Now.AddYears(-animalAge).AddDays(-(humanGivenName.Length * 3));
-
-            return createdDog;
         }
 
         public virtual void Speak()
