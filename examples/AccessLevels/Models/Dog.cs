@@ -3,17 +3,19 @@ namespace AccessLevels.Models;
 internal class Dog : Animal
 {
 
+    public string Breed { get; private set; }
     private struct _vetBill
     {
         public double Amount;
         public string Reason;
         
     }
-    internal Dog(string humanGivenName)
+    internal Dog(string humanGivenName, string breed)
     {
         Species = "Dog";
-        Name = humanGivenName ?? "Ollie";
+        Name = string.IsNullOrEmpty(humanGivenName) ? "Ollie" : humanGivenName;
         Noise = "Woof";
+        Breed = string.IsNullOrEmpty(breed) ? "Mixed" : breed;
     }
 
     private void Woof()

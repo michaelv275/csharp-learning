@@ -40,9 +40,26 @@ namespace AccessLevels.Models
             return createdCat;
         }
 
+        // create MakeDog function
+        // Species, noise, etc
+
+        public static Animal MakeDog(string humanGivenName, int animalAge, string Noise = "woof", string Breed = "Mixed", DateTime? birthdate = null)
+        {
+            Dog createdDog = new Dog(humanGivenName, Breed)
+            {
+                Age = animalAge,
+                Noise = Noise,
+                _birthdate = birthdate ?? DateTime.Now.AddYears(-animalAge).AddDays(-(humanGivenName.Length * 2))
+            };
+
+
+            return createdDog;
+        }
+
         public virtual void Speak()
         {
             Console.WriteLine($"{Name} the {Species} says {Noise}");
         }
+
     }
 }
