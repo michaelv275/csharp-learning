@@ -1,5 +1,4 @@
-﻿using System.Data.Common;
-using AccessLevels.Models;
+﻿using AccessLevels.Models;
 namespace AccessLevels
 {
     class Program
@@ -66,10 +65,25 @@ namespace AccessLevels
             * At the end of the program ask them if they would like to see the other dog, and repeat.
             */  
 
-            public static void ChangeDogName(string[] dogList)
+        }
+
+        /*
+            Multi line comment
+            
+            example
+        */
+        public static void ChangeDogName(/*string[]*/List<Dog> dogList)
         {
+            // I only changed 2 lines. I changed the parameter type from string[] to List<Dog> Because we
+            // want to operate on the Dog objects (Dog.Name) vs an array of strings ["Baxter", "Fido", "Spot"]
+            // I also changed the foreach loop to use the Dog object instead of var.
+
+            // The syntax for comments in C# that I used let's you be more clear vs just using // since that comments
+            // out the rest of the line. Anything between the /* and */ is considered a comment
+            // even if it spans multiple lines or you have code that should run on the same line.
+
             // for each Dog in dogList
-            foreach (var dog in dogList)
+            foreach (/*string*/Dog dog in dogList)
             {
                 Console.WriteLine($"Dog's name is {dog.Name}. Would you like to change it? (y/n) (yes/no)");
                 string[] yesAnswers = new string[] { "y", "yes" };
@@ -102,11 +116,31 @@ namespace AccessLevels
                 string userResponse2 = Console.ReadLine();
                 if (!yesAnswers.Contains(userResponse2.ToLower())) break;
             }
-
         }
 
+        // I only created a stub so the compiler wouldn't yell at you. It still needs to be implemented.
+        // I'm going to fill in the description of this method,
+        // but I will leave the implementation to you based off the description.
 
+        /// <summary>
+        /// Validates whether the user's input matches any of the acceptable response options.
+        /// </summary>
+        /// <param name="userActualResponse">The actual response provided by the user.</param>
+        /// <param name="yesResponses">Array of acceptable affirmative responses (e.g., "y", "yes").</param>
+        /// <param name="denialResponses">Array of acceptable negative responses (e.g., "n", "no").</param>
+        /// <returns>
+        /// <c>true</c> if the user's response (case-insensitive) matches any value in either 
+        /// the yesResponses or denialResponses arrays; otherwise, <c>false</c>.
+        /// </returns>
+        private static bool CheckUserInput()
+        {
+            // Set initial return value
+            bool isUserInputAcceptable = false;
 
+            // Check if input is valid or not.
+            // Change isUserInputAcceptable to true if valid
+
+            return isUserInputAcceptable;
         }
     }
 }
