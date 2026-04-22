@@ -92,18 +92,15 @@ namespace AccessLevels
                 string[] yesAnswers = new string[] { "y", "yes" };
                 string[] noAnswers = new string[] { "n", "no" };
                 string[] approvedAnswers = yesAnswers.Concat(noAnswers).ToArray();
-                string userResponse = string.Empty;
 
                 int maxTries = 3;
                 int currentTry = 0;
                 bool isUserInputValid = false;
-                 do
-                {
-                    Console.WriteLine($"Dog's name is {dog.Name}. Would you like to change it? (y/n) (yes/no)");
-                    userResponse = Console.ReadLine();        
 
-                }
-                while (!isUserInputValid && currentTry <= maxTries);
+                Console.WriteLine($"Dog's name is {dog.Name}. Would you like to change it? (y/n) (yes/no)");
+                string userResponse = Console.ReadLine();
+
+                while (!isUserInputValid && currentTry <= maxTries)
                 {
                     isUserInputValid = CheckUserInput(userResponse, allowableResponses: approvedAnswers);
                     if (!isUserInputValid)
@@ -113,7 +110,7 @@ namespace AccessLevels
                     }
                     currentTry++;
                 }
-                    return;
+                return;
                 if (yesAnswers.Contains(userResponse.ToLower()))
                 {
                     Console.WriteLine($"What would you like to rename {dog.Name} to?");
