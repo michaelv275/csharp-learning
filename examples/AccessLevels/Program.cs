@@ -19,6 +19,10 @@ namespace AccessLevels
             _animals.Add(dog1);
             _animals.Add(dog2);
 
+            // List<Dog> dogList = _animals.Where(A => A.GetType() == typeof(Dog)).ToList<Dog>();
+
+            ChangeDogName(_animals);
+
             // Console.WriteLine("Enter some string");
             // string userNumbersAsString = Console.ReadLine();
             
@@ -72,7 +76,7 @@ namespace AccessLevels
             
             example
         */
-        public static void ChangeDogName(/*string[]*/List<Dog> dogList)
+        public static void ChangeDogName(/*string[]*/List<Animal> dogList)
         {
             // I only changed 2 lines. I changed the parameter type from string[] to List<Dog> Because we
             // want to operate on the Dog objects (Dog.Name) vs an array of strings ["Baxter", "Fido", "Spot"]
@@ -83,24 +87,33 @@ namespace AccessLevels
             // even if it spans multiple lines or you have code that should run on the same line.
 
             // for each Dog in dogList
-            foreach (/*string*/Dog dog in dogList)
+            foreach (/*string*/Animal dog in dogList)
             {
-                Console.WriteLine($"Dog's name is {dog.Name}. Would you like to change it? (y/n) (yes/no)");
                 string[] yesAnswers = new string[] { "y", "yes" };
                 string[] noAnswers = new string[] { "n", "no" };
-
-                string userResponse = Console.ReadLine();
+                string[] approvedAnswers = yesAnswers.Concat(noAnswers).ToArray();
+                string userResponse = string.Empty;
 
                 int maxTries = 3;
                 int currentTry = 0;
                 bool isUserInputValid = false;
-                while (!isUserInputValid && currentTry <= maxTries)
+                 do
                 {
-                    isUserInputValid = CheckUserInput();
-                    Console.WriteLine($"Counter is at {currentTry}");
+                    Console.WriteLine($"Dog's name is {dog.Name}. Would you like to change it? (y/n) (yes/no)");
+                    userResponse = Console.ReadLine();        
+
+                }
+                while (!isUserInputValid && currentTry <= maxTries);
+                {
+                    isUserInputValid = CheckUserInput(userResponse, allowableResponses: approvedAnswers);
+                    if (!isUserInputValid)
+                    {
+                        Console.WriteLine($"You answered: \"{userResponse}\". The allowable responses are: \"{string.Join(',', approvedAnswers)}\". You are on {currentTry} out of {maxTries}.");
+                        userResponse = Console.ReadLine();
+                    }
                     currentTry++;
                 }
-
+                    return;
                 if (yesAnswers.Contains(userResponse.ToLower()))
                 {
                     Console.WriteLine($"What would you like to rename {dog.Name} to?");
@@ -132,12 +145,18 @@ namespace AccessLevels
         /// <c>true</c> if the user's response (case-insensitive) matches any value in either 
         /// the yesResponses or denialResponses arrays; otherwise, <c>false</c>.
         /// </returns>
-        private static bool CheckUserInput()
+        private static bool CheckUserInput(string userActualResponse, string[]? yesResponses = null, string[]? denialResponses = null, string[]? allowableResponses = null)
         {
             // Set initial return value
             bool isUserInputAcceptable = false;
 
             // Check if input is valid or not.
+            // combine arrays, use method contains to check
+
+            // allowableResponses = yesResponses.Concat(denialResponses).ToArray();
+            isUserInputAcceptable = allowableResponses.Contains(userActualResponse);
+
+
             // Change isUserInputAcceptable to true if valid
 
             return isUserInputAcceptable;
