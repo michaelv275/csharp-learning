@@ -97,13 +97,10 @@ namespace AccessLevels
                 int maxTries = 3;
                 int currentTry = 0;
                 bool isUserInputValid = false;
-                 do
-                {
-                    Console.WriteLine($"Dog's name is {dog.Name}. Would you like to change it? (y/n) (yes/no)");
-                    userResponse = Console.ReadLine();        
+                Console.WriteLine($"Dog's name is {dog.Name}. Would you like to change it? (y/n) (yes/no)");
+                userResponse = Console.ReadLine();        
 
-                }
-                while (!isUserInputValid && currentTry <= maxTries);
+                while (!isUserInputValid && currentTry <= maxTries)
                 {
                     isUserInputValid = CheckUserInput(userResponse, allowableResponses: approvedAnswers);
                     if (!isUserInputValid)
@@ -113,7 +110,6 @@ namespace AccessLevels
                     }
                     currentTry++;
                 }
-                    return;
                 if (yesAnswers.Contains(userResponse.ToLower()))
                 {
                     Console.WriteLine($"What would you like to rename {dog.Name} to?");
