@@ -22,53 +22,6 @@ namespace AccessLevels
             // List<Dog> dogList = _animals.Where(A => A.GetType() == typeof(Dog)).ToList<Dog>();
 
             ChangeDogName(_animals);
-
-            // Console.WriteLine("Enter some string");
-            // string userNumbersAsString = Console.ReadLine();
-            
-            // Console.WriteLine($"You entered (as string): {userNumbersAsString}");
-
-            // string orginalPlus2 = userNumbersAsString + 2;
-
-            // Console.WriteLine($"original (string) + 2 = {orginalPlus2}");
-
-            // Console.WriteLine($"Dog's name is {dog1.Name}. Would you like to change it? (y/n) (yes/no)");
-            // string[] yesAnswers = new string[] { "y", "yes" };
-            // string[] noAnswers = new string[] { "n", "no" };
-
-            // string userResponse = Console.ReadLine();
-            // if (yesAnswers.Contains(userResponse.ToLower()))
-            // {
-            //     Console.WriteLine($"What would you like to rename {dog1.Name} to?");
-            //     string newName = Console.ReadLine();
-            //     dog1.Name = String.IsNullOrEmpty(newName) ? dog1.Name : newName;
-            //     Console.WriteLine($"The new dog name is {dog1.Name}");
-            // } else
-            // {
-            //     Console.WriteLine($"The dog's name remains {dog1.Name}");
-            // }
-
-            // Console.WriteLine($"Congratulations, your dog's name is {dog1.Name}");
-
-            // int maxTries = 3;
-            // int currentTry = 0;
-            // bool isUserInputValid = false;
-            // while (!isUserInputValid && currentTry <= maxTries)
-            // {
-            //     isUserInputValid = CheckUserInput();
-            //     Console.WriteLine($"Counter is at {currentTry}");
-            //     currentTry++;
-            // }
-            
-            // HOMEWORK:
-            // turn off autocomplete in this repo
-            /* Ask a user if they want to rename a dog:
-            * If yes, let them rename
-            * If no, Keep the same name
-            * if unsure, ask them again until they give a valid answer
-            * At the end of the program ask them if they would like to see the other dog, and repeat.
-            */  
-
         }
 
         /*
@@ -76,18 +29,10 @@ namespace AccessLevels
             
             example
         */
-        public static void ChangeDogName(/*string[]*/List<Animal> dogList)
+        public static void ChangeDogName(List<Animal> dogList)
         {
-            // I only changed 2 lines. I changed the parameter type from string[] to List<Dog> Because we
-            // want to operate on the Dog objects (Dog.Name) vs an array of strings ["Baxter", "Fido", "Spot"]
-            // I also changed the foreach loop to use the Dog object instead of var.
-
-            // The syntax for comments in C# that I used let's you be more clear vs just using // since that comments
-            // out the rest of the line. Anything between the /* and */ is considered a comment
-            // even if it spans multiple lines or you have code that should run on the same line.
-
-            // for each Dog in dogList
-            foreach (/*string*/Animal dog in dogList)
+            Dictionary<string, string> renamedAnimals = [];
+            foreach (Animal dog in dogList)
             {
                 string[] yesAnswers = new string[] { "y", "yes" };
                 string[] noAnswers = new string[] { "n", "no" };
@@ -114,6 +59,7 @@ namespace AccessLevels
                 {
                     Console.WriteLine($"What would you like to rename {dog.Name} to?");
                     string newName = Console.ReadLine();
+                    renamedAnimals[dog.Name] = String.IsNullOrEmpty(newName) ? dog.Name : newName;
                     dog.Name = String.IsNullOrEmpty(newName) ? dog.Name : newName;
                     Console.WriteLine($"The new dog name is {dog.Name}");
                 } else
@@ -123,14 +69,22 @@ namespace AccessLevels
 
                 Console.WriteLine($"Congratulations, your dog's name is {dog.Name}. Would you like to name another one? (y/n)");
                 string userResponse2 = Console.ReadLine();
-                if (!yesAnswers.Contains(userResponse2.ToLower())) break;
+                if (!yesAnswers.Contains(userResponse2.ToLower()))
+                {
+                    if (renamedAnimals.Count > 0)
+                    {
+                        foreach(string name in renamedAnimals.Keys)
+                        {
+                            Console.WriteLine($"Original Name: {name}, New Name: {renamedAnimals[name]}");
+                        }
+
+                    }
+
+                    break;
+                };
             }
         }
-
-        // I only created a stub so the compiler wouldn't yell at you. It still needs to be implemented.
-        // I'm going to fill in the description of this method,
-        // but I will leave the implementation to you based off the description.
-
+        
         /// <summary>
         /// Validates whether the user's input matches any of the acceptable response options.
         /// </summary>
