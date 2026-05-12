@@ -17,7 +17,7 @@ class Program
     {
         // Make function to loop through fileNames and checkconfig for each (test config cases)
         VerifyFileConfigs(_exampleFileNames);
-
+        WriteAppConfig("newConfig.json");
     }
 
     private static void CheckConfig(string fileName)
@@ -60,6 +60,31 @@ class Program
         {
             CheckConfig(file);
         };
+    }
+
+    private static void WriteAppConfig(String newFileName)
+    {
+      AppConfig exampleAppConfig = new AppConfig()
+      {
+          HostURL = "/caveman",
+          UserIds = [10, 11, 12],
+          AdminUser = new User() {Id = 1, Name = "OogaBooga"},    
+      };
+      exampleAppConfig.AppName = "Caveman";
+      exampleAppConfig.Language = "Caveman";
+
+    // Serialize into JSON Object
+      String serializeAppConfig = JsonConvert.SerializeObject(exampleAppConfig);
+
+    // Convert to JObject
+
+    JObject newJObjAppConfig = JObject.Parse(serializeAppConfig);
+
+    // Write a file
+    string pathToConfig = Path.Combine("/Users/sophiapache/Documents/csharp-learning/examples/Serialization", newFileName);
+    File.WriteAllText(pathToConfig, newJObjAppConfig.ToString(Formatting.Indented));
+    Console.WriteLine("Bery gud");
+
     }
 
     private static void PrintUsers(List<User> users)
