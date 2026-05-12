@@ -1,0 +1,20 @@
+{
+  "weatherStation": "KSEA-04",
+  "readings": [
+    {
+      "timestamp": "2026-05-12T08:15:00Z",
+      "temperatureC": 12.4,
+      "humidity": 0.87,
+      "windKph": 18
+    },
+    {
+      "timestamp": "2026-05-12T09:15:00Z",
+      "temperatureC": 13.1,
+      "humidity": 0.82,
+      "windKph": 22
+    }
+  ],
+  "calibratedAt": "2026-04-30",
+  "operational": true,
+  "notes": null
+}

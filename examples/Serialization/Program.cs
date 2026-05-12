@@ -8,18 +8,23 @@ class Program
 {
     private static string _fileName = "config.json";
     private static List<User> _users = new List<User>();
+
+    private static List<String> _badExampleFileNames = new List<String>{"config.json", "badconfig.json", "emptyconfig.json", "randomconfig.json"};
+
+    private static List<String> _exampleFileNames = new List<String>{"config.json"};
+
     static void Main(string[] _)
     {
         // Make function to loop through fileNames and checkconfig for each (test config cases)
-        CheckConfig();
+        VerifyFileConfigs(_exampleFileNames);
 
     }
 
-    private static void CheckConfig()
+    private static void CheckConfig(string fileName)
     {
        // Verify file exists
 
-       string pathToConfig = Path.Combine("/Users/sophiapache/Documents/csharp-learning/examples/Serialization", _fileName);
+       string pathToConfig = Path.Combine("/Users/sophiapache/Documents/csharp-learning/examples/Serialization", fileName);
         FileInfo configFile = new FileInfo(pathToConfig);
         Console.WriteLine($"{configFile.Name} Exists; {configFile.Exists}");
         if (configFile.Exists)
@@ -38,11 +43,23 @@ class Program
         
        // Handle Errors HOMEWORK
        // What would happen if JSON was malformed? Create bad config.json files
+       // -> Did not output Config Json gud. Had this error: Unhandled exception. Newtonsoft.Json.JsonReaderException: After parsing a value an unexpected character was encountered: ". Path 'adminUser.email', line 10, position 4....
        // What happens if empty? If file doesn't exist?
+       // If empty -> deserializedJson.AppName = null, does not output config json gud
+       // If file doesnt exist -> emptyfile.json Exists; False is outputted
        // Create a random json file not at all similar to AppConfig model
+       // -> File exists and is true but it is also null
 
 
 
+    }
+
+    private static void VerifyFileConfigs(List<String> fileNames)
+    {
+        foreach (string file in fileNames)
+        {
+            CheckConfig(file);
+        };
     }
 
     private static void PrintUsers(List<User> users)
