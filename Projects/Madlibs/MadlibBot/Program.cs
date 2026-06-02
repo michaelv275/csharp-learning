@@ -1,10 +1,123 @@
-﻿namespace MadlibBot
+﻿using System.Net.Http.Headers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
+namespace MadlibBot
 {
     internal class Program
     {
-        static void Main(string[] args)
+        private static HttpClient _apiClient;
+
+        static async Task Main(string[] _1)
         {
-            Console.WriteLine("Hello, World!");
+            string headerKey = "X-API-Key";
+            string sophiaApiToken = "";
+            _apiClient = new HttpClient();
+
+            SetRequestHeaders(headerKey, sophiaApiToken);
+
+            for (int i = 0; i < 5; i++)
+            {
+                try
+                {
+                    string jsonString = await GetApiResponse();
+
+                    if (!string.IsNullOrEmpty(jsonString))
+                    {
+                        WriteFiles(jsonString);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"*Error* Could not make request. Error: {ex.Message}");
+                }
+            }
+
+            // What we need:
+            // response will be a JSON string. Convert to JOBject
+            // We need, obj.data.stories[0].title for deduping
+            // obj.data.stories[0].template for the story template which has placeholders that match the label of the "blank" ex: Dr. {name}
+            // obj.data.stories[0].blanks Which is an array of objects like:
+            // {
+            //     "id": 1,
+            //     "type": "name",
+            //     "label": "Name"
+            // }
+            // obs.data.stories[0].category
+        }
+
+        private static void SetRequestHeaders(string headerKey, string headerValue)
+        {
+            HttpRequestHeaders requestHeaders = _apiClient.DefaultRequestHeaders;
+            requestHeaders.Add(headerKey, headerValue);
+        }
+
+        private static void WriteFiles(string rawJsonResponse)
+        {
+            // convert to JObject
+            JObject responseObj = JObject.Parse(rawJsonResponse);
+
+            // check category of response and write to file based on category (if exists, write to existing file, if not, create new file
+            string category = responseObj["data"]["stories"][0]["category"].ToString();
+            string categoryFolderPath =
+                $"/Users/sophiapache/Documents/csharp-learning/Projects/Madlibs/MadlibBot/Templates/{category}/";
+            bool doesFolderExist = Directory.Exists(categoryFolderPath);
+
+            if (!doesFolderExist)
+            {
+                Directory.CreateDirectory(categoryFolderPath);
+            }
+
+            // check title of response and check if title already exists in file for that category. If it does, skip, if not, write to file)
+            string escapedtitle = responseObj["data"]
+                ["stories"][0]["title"]
+                .ToString()
+                .Replace(' ', '-');
+            string titleFilePath = $"{categoryFolderPath}{escapedtitle}.json";
+            bool doesFileExist = File.Exists(titleFilePath);
+
+            if (!doesFileExist)
+            {
+                File.WriteAllText(titleFilePath, rawJsonResponse);
+            }
+            else
+            {
+                Console.WriteLine(
+                    $"File with title {escapedtitle} already exists for category {category}"
+                );
+            }
+        }
+
+        private static async Task<string> GetApiResponse()
+        {
+            string baseURL = "https://api.apiverve.com/v1/madlibs";
+            string response = "";
+
+            Uri requestEndpoint = new Uri(baseURL);
+            HttpResponseMessage httpResponse;
+
+            httpResponse = await _apiClient.GetAsync(requestEndpoint);
+
+            if (httpResponse.Content != null)
+            {
+                response = await httpResponse.Content.ReadAsStringAsync();
+
+                if (String.IsNullOrEmpty(response))
+                {
+                    Console.WriteLine("Response was null or empty");
+                    return "";
+                }
+            }
+            else
+            {
+                Console.WriteLine("Content was null");
+            }
+
+            return response;
         }
     }
 }
+
+// Homework:
+// create model for response object to deserialize into instead of using JObject (MadLibResponse)
+// Subobjects: Blanks

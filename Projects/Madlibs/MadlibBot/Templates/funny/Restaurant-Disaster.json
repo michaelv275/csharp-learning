@@ -1,0 +1,38 @@
+{
+  "status": "ok",
+  "error": null,
+  "data": {
+    "stories": [
+      {
+        "title": "Restaurant Disaster",
+        "template": "I went to a {adjective} restaurant called The {adjective} {noun}. The waiter was a {adjective} {animal} who kept {verb_ing} on the tables. I ordered {number} {adjective} {plural_noun} with a side of {adjective} {noun}. When the bill came, it said I owed {number} {plural_noun}!",
+        "blanks": [
+          { "id": 1, "type": "adjective", "label": "Adjective" },
+          { "id": 2, "type": "adjective", "label": "Adjective" },
+          { "id": 3, "type": "noun", "label": "Noun" },
+          { "id": 4, "type": "adjective", "label": "Adjective" },
+          { "id": 5, "type": "animal", "label": "Animal" },
+          { "id": 6, "type": "verb_ing", "label": "Verb ending in -ing" },
+          { "id": 7, "type": "number", "label": "Number" },
+          { "id": 8, "type": "adjective", "label": "Adjective" },
+          { "id": 9, "type": "plural_noun", "label": "Plural Noun" },
+          { "id": 10, "type": "adjective", "label": "Adjective" },
+          { "id": 11, "type": "noun", "label": "Noun" },
+          { "id": 12, "type": "number", "label": "Number" },
+          { "id": 13, "type": "plural_noun", "label": "Plural Noun" }
+        ],
+        "blankCount": 13,
+        "category": "funny"
+      }
+    ],
+    "count": 1,
+    "category": "random",
+    "html": "<html><head><title>Mad Libs</title><style>body {font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: 0 auto;}h1 {text-align: center; color: #E91E63;}.story-card {background: #fff; border: 2px solid #E91E63; padding: 25px; margin: 25px 0; border-radius: 15px;}.title {font-size: 24px; font-weight: bold; color: #E91E63; margin-bottom: 20px;}.blanks-section {background: #FCE4EC; padding: 20px; border-radius: 10px; margin-bottom: 20px;}.blanks-section h3 {margin-top: 0;}.blank-item {margin: 10px 0; display: flex; align-items: center;}.blank-label {min-width: 50px; font-weight: bold;}.blank-type {color: #666; margin-left: 10px;}.blank-input {flex: 1; padding: 8px; border: 1px solid #E91E63; border-radius: 5px; margin-left: 10px;}.story-template {line-height: 2; font-size: 16px;}.blank-marker {background: #E91E63; color: white; padding: 2px 8px; border-radius: 3px; font-weight: bold;}</style></head><body><h1>Mad Libs</h1><div class='story-card'><div class='title'>Restaurant Disaster</div><div class='blanks-section'><h3>Fill in the blanks:</h3><div class='blank-item'><span class='blank-label'>1.</span><span class='blank-type'>Adjective</span><input type='text' class='blank-input' placeholder='Enter adjective'></div><div class='blank-item'><span class='blank-label'>2.</span><span class='blank-type'>Adjective</span><input type='text' class='blank-input' placeholder='Enter adjective'></div><div class='blank-item'><span class='blank-label'>3.</span><span class='blank-type'>Noun</span><input type='text' class='blank-input' placeholder='Enter noun'></div><div class='blank-item'><span class='blank-label'>4.</span><span class='blank-type'>Adjective</span><input type='text' class='blank-input' placeholder='Enter adjective'></div><div class='blank-item'><span class='blank-label'>5.</span><span class='blank-type'>Animal</span><input type='text' class='blank-input' placeholder='Enter animal'></div><div class='blank-item'><span class='blank-label'>6.</span><span class='blank-type'>Verb ending in -ing</span><input type='text' class='blank-input' placeholder='Enter verb ending in -ing'></div><div class='blank-item'><span class='blank-label'>7.</span><span class='blank-type'>Number</span><input type='text' class='blank-input' placeholder='Enter number'></div><div class='blank-item'><span class='blank-label'>8.</span><span class='blank-type'>Adjective</span><input type='text' class='blank-input' placeholder='Enter adjective'></div><div class='blank-item'><span class='blank-label'>9.</span><span class='blank-type'>Plural Noun</span><input type='text' class='blank-input' placeholder='Enter plural noun'></div><div class='blank-item'><span class='blank-label'>10.</span><span class='blank-type'>Adjective</span><input type='text' class='blank-input' placeholder='Enter adjective'></div><div class='blank-item'><span class='blank-label'>11.</span><span class='blank-type'>Noun</span><input type='text' class='blank-input' placeholder='Enter noun'></div><div class='blank-item'><span class='blank-label'>12.</span><span class='blank-type'>Number</span><input type='text' class='blank-input' placeholder='Enter number'></div><div class='blank-item'><span class='blank-label'>13.</span><span class='blank-type'>Plural Noun</span><input type='text' class='blank-input' placeholder='Enter plural noun'></div></div><div class='story-template'>I went to a <span class='blank-marker'>1</span> restaurant called The <span class='blank-marker'>2</span> <span class='blank-marker'>3</span>. The waiter was a <span class='blank-marker'>4</span> <span class='blank-marker'>5</span> who kept <span class='blank-marker'>6</span> on the tables. I ordered <span class='blank-marker'>7</span> <span class='blank-marker'>8</span> <span class='blank-marker'>9</span> with a side of <span class='blank-marker'>10</span> <span class='blank-marker'>11</span>. When the bill came, it said I owed <span class='blank-marker'>12</span> <span class='blank-marker'>13</span>!</div></div></body></html>",
+    "image": {
+      "imageName": "24cfbb2f-4d3e-433f-b88a-f1d9bdfdc92b_madlibs.png",
+      "format": ".png",
+      "downloadURL": "https://storage.googleapis.com/apiverve/APIData/madlibs/24cfbb2f-4d3e-433f-b88a-f1d9bdfdc92b_madlibs.png?GoogleAccessId=635500398038-compute%40developer.gserviceaccount.com&Expires=1780523146&Signature=GHaSW%2FtNA2KyR6YOIx2TFrASB5RnJGQt%2FtZeemoXKEu4EIxz6O%2BdgEHv3%2BBDmKdlxkPT%2Fl2BguxoG%2FKxJfyWGOpYSBGwBnGx6%2BSkUZMMnFXq7hdR%2Fo7jSTLidz3JLuFD8G1BHZRp%2Bm6G%2BFBBXA5EPFLQmz4ayxia%2FZc39ScPSh84s8ldnIk86pt9H10SjUQaM71PZCl0I92vLGgF5SyaGU865ZpA4c2Wf78LJiBGbRS3c4w%2BT2Efqa2Vb1A1hmFVKZljni1JqzI2%2FQaBkc%2FwLnHN0x19pbrxfJBT7XUMpOtv8v2U8a1s0OZQLDjpgll5p8Up1%2FxY1mvhTshbq%2F4wqw%3D%3D",
+      "expires": 1780523146665
+    }
+  }
+}
