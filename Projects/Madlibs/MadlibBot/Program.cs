@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Headers;
+using MadLibBot.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -21,6 +22,8 @@ namespace MadlibBot
                 try
                 {
                     string jsonString = await GetApiResponse();
+
+                    
 
                     if (!string.IsNullOrEmpty(jsonString))
                     {
@@ -54,38 +57,42 @@ namespace MadlibBot
 
         private static void WriteFiles(string rawJsonResponse)
         {
-            // convert to JObject
-            JObject responseObj = JObject.Parse(rawJsonResponse);
+            JObject rawObj = JObject.Parse(rawJsonResponse);
 
-            // check category of response and write to file based on category (if exists, write to existing file, if not, create new file
-            string category = responseObj["data"]["stories"][0]["category"].ToString();
-            string categoryFolderPath =
-                $"/Users/sophiapache/Documents/csharp-learning/Projects/Madlibs/MadlibBot/Templates/{category}/";
-            bool doesFolderExist = Directory.Exists(categoryFolderPath);
-
-            if (!doesFolderExist)
+            if (rawObj["data"]["stories"] != null)
             {
-                Directory.CreateDirectory(categoryFolderPath);
+                // Assumes Story is a custom class you already created to match the data shape you want
+                List<MadLibStoryTemplate> responseObj = JObject.Parse(rawJsonResponse)["data"]["stories"].ToObject<List<MadLibStoryTemplate>>();
+
+                // check category of response and write to file based on category (if exists, write to existing file, if not, create new file
+                string category = responseObj[0].Category;
+                string categoryFolderPath =
+                    $"/Users/sophiapache/Documents/csharp-learning/Projects/Madlibs/MadlibBot/Templates/{category}/";
+                bool doesFolderExist = Directory.Exists(categoryFolderPath);
+
+                if (!doesFolderExist)
+                {
+                    Directory.CreateDirectory(categoryFolderPath);
+                }
+
+                // check title of response and check if title already exists in file for that category. If it does, skip, if not, write to file)
+                string escapedtitle = responseObj[0].Title.Replace(' ', '-');
+                string titleFilePath = $"{categoryFolderPath}{escapedtitle}.json";
+                bool doesFileExist = File.Exists(titleFilePath);
+
+                if (!doesFileExist)
+                {
+                    File.WriteAllText(titleFilePath, rawJsonResponse);
+                }
+                else
+                {
+                    Console.WriteLine(
+                        $"File with title {escapedtitle} already exists for category {category}"
+                    );
+                }
             }
 
-            // check title of response and check if title already exists in file for that category. If it does, skip, if not, write to file)
-            string escapedtitle = responseObj["data"]
-                ["stories"][0]["title"]
-                .ToString()
-                .Replace(' ', '-');
-            string titleFilePath = $"{categoryFolderPath}{escapedtitle}.json";
-            bool doesFileExist = File.Exists(titleFilePath);
 
-            if (!doesFileExist)
-            {
-                File.WriteAllText(titleFilePath, rawJsonResponse);
-            }
-            else
-            {
-                Console.WriteLine(
-                    $"File with title {escapedtitle} already exists for category {category}"
-                );
-            }
         }
 
         private static async Task<string> GetApiResponse()
