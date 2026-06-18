@@ -122,6 +122,24 @@ namespace MadlibBot
 
             return response;
         }
+
+        private static void GameIntroduction()
+        {
+            Console.WriteLine("welcome 2 madlibs games i caveman.");
+            Console.WriteLine("enter words and i make story. you like? we play? yes? no? maybe? we play anyway.");
+            Console.WriteLine("we start now.");
+
+            string playerName = Console.ReadLine();
+            while (!string.IsNullOrEmpty(playerName))
+            {
+                Console.WriteLine("what your name? hit enter when done new players.");
+                playerName = Console.ReadLine();
+                new Player.Player(playerName);
+            }
+
+            Console.WriteLine("all players added. let play");
+
+        }
     }
 }
 
