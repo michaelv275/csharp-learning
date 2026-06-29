@@ -140,6 +140,35 @@ namespace MadlibBot
             Console.WriteLine("all players added. let play");
 
         }
+
+        // Get template and blanks from response
+        private static void GetTemplate()
+        {
+            // Pick a random template from the Templates folder
+            List<string> randomCategory = new List<string> { "Adventure", "Mystery", "Fantasy" };
+            string category = randomCategory[new Random().Next(randomCategory.Count)];
+            string categoryFolderPath = $"/Users/sophiapache/Documents/csharp-learning/Projects/Madlibs/MadlibBot/Templates/{category}/";
+            bool doesFolderExist = Directory.Exists(categoryFolderPath);
+
+            if (doesFolderExist)
+            {
+                // Pick random file in that folder
+                string[] files = Directory.GetFiles(categoryFolderPath, "*.json");
+                string randomFile = files[new Random().Next(files.Length)];
+                JObject jsonText = JObject.Parse(File.ReadAllText(randomFile));
+
+                // Deserialize
+                MadLibStoryTemplate deserializedJson = JsonConvert.DeserializeObject<MadLibStoryTemplate>(jsonText.ToString());
+                Console.WriteLine(deserializedJson);
+            
+            }
+                
+            // Extract the blanks obj from the templates json file
+
+            // Loop through blanks and prompt user for input
+
+        }
+
     }
 }
 
