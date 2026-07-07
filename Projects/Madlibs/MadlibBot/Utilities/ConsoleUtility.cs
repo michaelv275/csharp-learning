@@ -55,7 +55,7 @@ namespace Madlibs.Utilities
         {
             int userValue = -1;
             //1. Display prompt
-            ConsoleUtility.WriteColored($"\n{prompt} ", ConsoleColor.Yellow);
+            WriteColored($"\n{prompt} ", ConsoleColor.Yellow);
             
             //2. Store initial user input (Console.ReadLine())
             string userInput = Console.ReadLine();
@@ -69,15 +69,13 @@ namespace Madlibs.Utilities
             while (!isInputValid)
             {
                 //Validate
-                bool isInteger = int.TryParse(userInput, out userValue);
-            }
+                isInputValid = int.TryParse(userInput, out userValue);
 
-            //4. If invalid, reprompt
-
-            if (userValue <= -1)
-            {
-                // Recursively call to get valid input
-                userValue = GetPositiveIntInputFromUser("bad bad!!! positive num ONLY >:(");
+                if (!isInputValid || userValue <= -1)
+                {
+                    // Recursively call to get valid input
+                    return GetPositiveIntInputFromUser("bad bad!!! positive num ONLY >:(. Again!");
+                }
             }
 
             return userValue;

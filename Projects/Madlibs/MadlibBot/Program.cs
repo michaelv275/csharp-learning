@@ -11,7 +11,11 @@ namespace MadlibBot
 
         static void Main(string[] _1)
         {
-           List<Player> gamePlayers = GameIntroduction();
+            List<Player> gamePlayers = GameIntroduction();
+           foreach (Player player in gamePlayers)
+            {
+                Console.WriteLine($"Player: {player.Name}");
+            }
         }
 
 
@@ -23,22 +27,19 @@ namespace MadlibBot
 
             // Ask how many human players are playing
             int playerCount = ConsoleUtility.GetPositiveIntInputFromUser("how many cavemen ooga booga");
-            return new List<Player>();
-
-            // Collect user input as int
-            // Loop through and collect names
-            // Add caveman at the end.
-
-            string playerName = Console.ReadLine();
-            while (!string.IsNullOrEmpty(playerName))
+            List<Player> playerList = new List<Player>();
+            for (int i = 0; i < playerCount; i++)
             {
                 Console.WriteLine("what your name? hit enter when done new players.");
-                playerName = Console.ReadLine();
-                _ = new Player(playerName);
+                string cavemanName = Console.ReadLine();
+                // Validate string input, make sure not null or empty. Write function
+                playerList.Add(new Player(cavemanName));
             }
 
+            playerList.Add(new Player("BoogaBot"));
+
             Console.WriteLine("all players added. let play");
-            //return playerListVar
+            return playerList;
         }
 
         // Get template and blanks from response
