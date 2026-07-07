@@ -1,7 +1,7 @@
-﻿using System.Net.Http.Headers;
-using MadLibBot.Models;
+﻿using MadLibBot.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Net.Http.Headers;
 
 namespace MadlibBot
 {
@@ -22,8 +22,6 @@ namespace MadlibBot
                 try
                 {
                     string jsonString = await GetApiResponse();
-
-                    
 
                     if (!string.IsNullOrEmpty(jsonString))
                     {
@@ -72,7 +70,7 @@ namespace MadlibBot
 
                 if (!doesFolderExist)
                 {
-                    Directory.CreateDirectory(categoryFolderPath);
+                    _ = Directory.CreateDirectory(categoryFolderPath);
                 }
 
                 // check title of response and check if title already exists in file for that category. If it does, skip, if not, write to file)
@@ -91,8 +89,6 @@ namespace MadlibBot
                     );
                 }
             }
-
-
         }
 
         private static async Task<string> GetApiResponse()
@@ -109,7 +105,7 @@ namespace MadlibBot
             {
                 response = await httpResponse.Content.ReadAsStringAsync();
 
-                if (String.IsNullOrEmpty(response))
+                if (string.IsNullOrEmpty(response))
                 {
                     Console.WriteLine("Response was null or empty");
                     return "";
@@ -134,7 +130,7 @@ namespace MadlibBot
             {
                 Console.WriteLine("what your name? hit enter when done new players.");
                 playerName = Console.ReadLine();
-                new Player.Player(playerName);
+                _ = new Player(playerName);
             }
 
             Console.WriteLine("all players added. let play");
@@ -145,7 +141,7 @@ namespace MadlibBot
         private static void GetTemplate()
         {
             // Pick a random template from the Templates folder
-            List<string> randomCategory = new List<string> { "Adventure", "Mystery", "Fantasy" };
+            List<string> randomCategory = ["Adventure", "Mystery", "Fantasy"];
             string category = randomCategory[new Random().Next(randomCategory.Count)];
             string categoryFolderPath = $"/Users/sophiapache/Documents/csharp-learning/Projects/Madlibs/MadlibBot/Templates/{category}/";
             bool doesFolderExist = Directory.Exists(categoryFolderPath);
@@ -160,15 +156,14 @@ namespace MadlibBot
                 // Deserialize
                 MadLibStoryTemplate deserializedJson = JsonConvert.DeserializeObject<MadLibStoryTemplate>(jsonText.ToString());
                 Console.WriteLine(deserializedJson);
-            
+
             }
-                
+
             // Extract the blanks obj from the templates json file
 
             // Loop through blanks and prompt user for input
 
         }
-
     }
 }
 
