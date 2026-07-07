@@ -25,45 +25,13 @@ Faker (Word API): Part of the Faker library, this provides a method to generate 
 9. Caveman will play randomly and human gets to write in input.
    First one to win.
 
+
+# Last time
+
+
+
 # To Do
 
-1. Talk about example classes.
-2. Research APIs (homework)
+1. 
+2. 
 3.
-
-APIVerve for story templates + created word lists (a JSON with arrays of nouns/adjectives/verbs/adverbs) for the fills.
-
-APIVerve:
-
-The request
-
-- Method: GET
-- Base URL: https://api.apiverve.com (the Mad Libs path is shown on your dashboard's "Code" tab — typically /v1/madlibs; confirm it there)
-- Auth header: X-API-Key: your_key_here (HTTPS required)
-
-The response shape
-
-{
-"status": "ok",
-"error": null,
-"data": {
-"stories": [
-{
-"title": "Restaurant Disaster",
-"template": "...story text with {adjective} {noun} placeholders...",
-"blanks": [
-{ "id": 1, "type": "adjective", "label": "Adjective" }
-// ...one per blank
-],
-"blankCount": 13,
-"category": "funny"
-}
-],
-"count": 1,
-"category": "funny",
-"html": "...",
-"image": { "imageName": "...", "format": ".png", "downloadURL": "...", "expires": 0 }
-}
-}
-
-The two fields you care about: template (the story with {type} placeholders) and blanks (the ordered, POS-typed slots to prompt the user for).
