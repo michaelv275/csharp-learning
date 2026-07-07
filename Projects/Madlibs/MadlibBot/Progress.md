@@ -25,13 +25,14 @@ Faker (Word API): Part of the Faker library, this provides a method to generate 
 9. Caveman will play randomly and human gets to write in input.
    First one to win.
 
-
 # Last time
 
-
+1. Created custom GetIntInputFromUser utility method
+2. Got player count and built basic player list
 
 # To Do
 
-1. 
-2. 
+1. Create Utility method to get string input from user
+2. Replace logic in GameIntroduction() to use new utility method
+   - Make sure to use ConsoleUtility WriteColoredLine
 3.
