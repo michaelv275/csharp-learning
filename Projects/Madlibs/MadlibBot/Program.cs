@@ -1,6 +1,7 @@
 ﻿using MadLibBot.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Madlibs.Utilities;
 
 namespace MadlibBot
 {
@@ -8,29 +9,25 @@ namespace MadlibBot
     {
         private static HttpClient _apiClient;
 
-        static async Task Main(string[] _1)
+        static void Main(string[] _1)
         {
-           
-
-            // What we need:
-            // response will be a JSON string. Convert to JOBject
-            // We need, obj.data.stories[0].title for deduping
-            // obj.data.stories[0].template for the story template which has placeholders that match the label of the "blank" ex: Dr. {name}
-            // obj.data.stories[0].blanks Which is an array of objects like:
-            // {
-            //     "id": 1,
-            //     "type": "name",
-            //     "label": "Name"
-            // }
-            // obs.data.stories[0].category
+           List<Player> gamePlayers = GameIntroduction();
         }
 
 
-        private static void GameIntroduction()
+        private static List<Player> GameIntroduction()
         {
             Console.WriteLine("welcome 2 madlibs games i caveman.");
             Console.WriteLine("enter words and i make story. you like? we play? yes? no? maybe? we play anyway.");
             Console.WriteLine("we start now.");
+
+            // Ask how many human players are playing
+            int playerCount = ConsoleUtility.GetPositiveIntInputFromUser("how many cavemen ooga booga");
+            return new List<Player>();
+
+            // Collect user input as int
+            // Loop through and collect names
+            // Add caveman at the end.
 
             string playerName = Console.ReadLine();
             while (!string.IsNullOrEmpty(playerName))
@@ -41,7 +38,7 @@ namespace MadlibBot
             }
 
             Console.WriteLine("all players added. let play");
-
+            //return playerListVar
         }
 
         // Get template and blanks from response
