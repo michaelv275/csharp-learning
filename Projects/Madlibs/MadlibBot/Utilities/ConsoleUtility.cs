@@ -56,7 +56,7 @@ namespace Madlibs.Utilities
             int userValue = -1;
             //1. Display prompt
             WriteColored($"\n{prompt} ", ConsoleColor.Yellow);
-            
+
             //2. Store initial user input (Console.ReadLine())
             string userInput = Console.ReadLine();
 
@@ -79,6 +79,18 @@ namespace Madlibs.Utilities
             }
 
             return userValue;
+        }
+
+        // string userNoun = GetUserInput("Enter a noun");
+
+        public static string? GetUserInput(string prompt)
+        {
+            ArgumentException.ThrowIfNullOrEmpty(prompt);
+
+            WriteColoredLine(prompt, ConsoleColor.Yellow);
+
+            return Console.ReadLine();
+
         }
     }
     

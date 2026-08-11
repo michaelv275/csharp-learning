@@ -8,70 +8,109 @@ namespace MadlibBot
     internal class Program
     {
         private static HttpClient _apiClient;
+        private static DirectoryInfo _templateFolder;
 
         static void Main(string[] _1)
         {
+            _templateFolder = new DirectoryInfo($"/Users/sophiapache/Documents/csharp-learning/Projects/Madlibs/MadlibBot/Templates/");
+
             List<Player> gamePlayers = GameIntroduction();
-           foreach (Player player in gamePlayers)
+            foreach (Player player in gamePlayers)
             {
                 Console.WriteLine($"Player: {player.Name}");
             }
+
+            MadLibStoryTemplate adventureTemplate = GetTemplate("Adventure");
+
+            Console.WriteLine($"The {adventureTemplate.Title} template has {adventureTemplate.BlankCount} blanks");
+
+            //Prompt user for category
+            //Get random template for category
+            //Get user input for all blanks from template
+            //Display the story with each users choices for "blanks"
         }
 
 
         private static List<Player> GameIntroduction()
         {
-            Console.WriteLine("welcome 2 madlibs games i caveman.");
-            Console.WriteLine("enter words and i make story. you like? we play? yes? no? maybe? we play anyway.");
-            Console.WriteLine("we start now.");
+
+            ConsoleUtility.WriteColoredLine("welcome 2 madlibs games i caveman.", ConsoleColor.Yellow);
+            ConsoleUtility.WriteColoredLine("enter words and i make story. you like? we play? yes? no? maybe? we play anyway.", ConsoleColor.Yellow);
+            ConsoleUtility.WriteColoredLine("we start now.", ConsoleColor.Yellow);
 
             // Ask how many human players are playing
             int playerCount = ConsoleUtility.GetPositiveIntInputFromUser("how many cavemen ooga booga");
             List<Player> playerList = new List<Player>();
             for (int i = 0; i < playerCount; i++)
             {
-                Console.WriteLine("what your name? hit enter when done new players.");
-                string cavemanName = Console.ReadLine();
+                string cavemanName = ConsoleUtility.GetUserInput("what your name? hit enter when done new players.");
                 // Validate string input, make sure not null or empty. Write function
                 playerList.Add(new Player(cavemanName));
             }
 
             playerList.Add(new Player("BoogaBot"));
 
-            Console.WriteLine("all players added. let play");
+            ConsoleUtility.WriteColoredLine("all players added. let play", ConsoleColor.Yellow);
             return playerList;
         }
 
-        // Get template and blanks from response
-        private static void GetTemplate()
+        // Get a template object for a given category
+        private static MadLibStoryTemplate? GetTemplate(string category)
         {
-            // Pick a random template from the Templates folder
-            List<string> randomCategory = ["Adventure", "Mystery", "Fantasy"];
-            string category = randomCategory[new Random().Next(randomCategory.Count)];
-            string categoryFolderPath = $"/Users/sophiapache/Documents/csharp-learning/Projects/Madlibs/MadlibBot/Templates/{category}/";
-            bool doesFolderExist = Directory.Exists(categoryFolderPath);
+            DirectoryInfo categoryDirectory = new DirectoryInfo(Path.Join(_templateFolder.FullName, category));
+            Console.WriteLine($"categoryDirectory = {categoryDirectory.FullName}");
+            FileInfo[] templateFileArray = categoryDirectory.GetFiles();
+            Console.WriteLine($"templateFileArray has {templateFileArray.Length} templates");
 
-            if (doesFolderExist)
-            {
-                // Pick random file in that folder
-                string[] files = Directory.GetFiles(categoryFolderPath, "*.json");
-                string randomFile = files[new Random().Next(files.Length)];
-                JObject jsonText = JObject.Parse(File.ReadAllText(randomFile));
+            if (templateFileArray.Length == 0) { 
+                throw new Exception("No templates found.");
+            };
 
-                // Deserialize
-                MadLibStoryTemplate deserializedJson = JsonConvert.DeserializeObject<MadLibStoryTemplate>(jsonText.ToString());
-                Console.WriteLine(deserializedJson);
+            int chosenIndex = 0;
 
-            }
+            // See how many files are in array
+            if (templateFileArray.Length > 1) {
+                Random generator = new Random();
+                chosenIndex = generator.Next(0, templateFileArray.Length);
+            } 
 
-            // Extract the blanks obj from the templates json file
+            Console.WriteLine($"chosenIndex = {chosenIndex}");
+            Console.WriteLine($"Chosen file path = {templateFileArray[chosenIndex].FullName}");
 
-            // Loop through blanks and prompt user for input
+            string fileContent = File.ReadAllText(templateFileArray[chosenIndex].FullName);
+            JObject wholeFile = JObject.Parse(fileContent);
+            JArray stories = (JArray) wholeFile["data"]["stories"];
+
+            Console.WriteLine($"fileContent = {stories}");
+
+            MadLibStoryTemplate template = stories.FirstOrDefault().ToObject<MadLibStoryTemplate>();
+            //After cleaning up json template files:
+            //MadLibStoryTemplate template = JsonConvert.DeserializeObject<MadLibStoryTemplate>(fileContent);
+            
+            Console.WriteLine($"template is null = {template is null}");
+
+            return template;
+        }
+
+    private static void InitializationChecks()
+    {
+        string categoryFolderPath = $"/Users/sophiapache/Documents/csharp-learning/Projects/Madlibs/MadlibBot/Templates/";
+        bool doesFolderExist = Directory.Exists(categoryFolderPath);
+
+        if (doesFolderExist)
+        {
+            // Pick random file in that folder
+            string[] files = Directory.GetFiles(categoryFolderPath, "*.json");
+            string randomFile = files[new Random().Next(files.Length)];
+            JObject jsonText = JObject.Parse(File.ReadAllText(randomFile));
+
+            // Deserialize
+            MadLibStoryTemplate deserializedJson = JsonConvert.DeserializeObject<MadLibStoryTemplate>(jsonText.ToString());
+            Console.WriteLine(deserializedJson);
 
         }
     }
+    
+}
 }
 
-// Homework:
-// create model for response object to deserialize into instead of using JObject (MadLibResponse)
-// Subobjects: Blanks

@@ -11,12 +11,15 @@ Random Word Form: A popular, free API (https://random-word-form.herokuapp.com/ra
 Random Word API (herokuapp): A simple API designed for fetching random words, often used to create combinations.
 Faker (Word API): Part of the Faker library, this provides a method to generate a random adjective, noun, or verb. [1, 2, 3, 4, 5]
 
+Create a method that that takes a MadlibBlank object and looks at its type property. Then grabs a .json file matching that type from the 'words' folder
+and outputs "Enter a <TYPE> ex: (top 3 examples from file)"
+
 # Example Game
 
 1. Build human players. Caveman = bot
 2. Best out of three rounds.
 3. All players presented the same madlib/questions
-4. All inputs are varied against dictionary (except Proper Nouns)
+4. All inputs are verified against dictionary (except Proper Nouns)
 5. Caveman selects their words from dictionary API.
 6. Madlibs are constructed and both are presented to users.
 7. All human users blind vote. Results withheld until end of game.
@@ -27,12 +30,11 @@ Faker (Word API): Part of the Faker library, this provides a method to generate 
 
 # Last time
 
-1. Created custom GetIntInputFromUser utility method
-2. Got player count and built basic player list
+1. Normalized Writelines
+2. Created a shared method for getting user input
+3. Created a GetFileTmeplate object
 
 # To Do
 
-1. Create Utility method to get string input from user
-2. Replace logic in GameIntroduction() to use new utility method
-   - Make sure to use ConsoleUtility WriteColoredLine
-3.
+1. Create a method that that takes a MadlibBlank object and looks at its type property. Then grabs a .json file matching that type from the 'words' folder and outputs "Enter a <TYPE> ex: (top 3 examples from file)"
+2. Clean up json template files down to match our template models
