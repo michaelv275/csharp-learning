@@ -20,12 +20,34 @@ namespace MadlibBot
                 Console.WriteLine($"Player: {player.Name}");
             }
 
-            MadLibStoryTemplate adventureTemplate = GetTemplate("Adventure");
+            string madlibGenre = GetMadlibGenre();
+            MadLibStoryTemplate adventureTemplate = GetTemplate(madlibGenre);
 
             Console.WriteLine($"The {adventureTemplate.Title} template has {adventureTemplate.BlankCount} blanks");
 
-            //Prompt user for category
-            //Get random template for category
+            int testIndex = 0;
+            foreach (MadLibBlank blank in adventureTemplate.Blanks)
+            {
+                List<string> examples = GetExamplesForBlankType();
+                foreach (Player currentCaveman in gamePlayers)
+                {
+                    ConsoleUtility.WriteColoredLine($"caveman {currentCaveman.Name} say {blank.Type} (ex. {string.Join(',', examples)})", ConsoleColor.Yellow);
+                    currentCaveman.MadLibResponse.Add(ConsoleUtility.GetSecureUserInput());
+                }
+
+                testIndex++;
+
+                if (testIndex >= 3)
+                {
+                    break;
+                }
+            }
+
+            foreach(Player test in gamePlayers)
+            {
+                Console.WriteLine($"{test.Name} entered: {string.Join(',', test.MadLibResponse)}");
+            }
+
             //Get user input for all blanks from template
             //Display the story with each users choices for "blanks"
         }
@@ -58,9 +80,7 @@ namespace MadlibBot
         private static MadLibStoryTemplate? GetTemplate(string category)
         {
             DirectoryInfo categoryDirectory = new DirectoryInfo(Path.Join(_templateFolder.FullName, category));
-            Console.WriteLine($"categoryDirectory = {categoryDirectory.FullName}");
             FileInfo[] templateFileArray = categoryDirectory.GetFiles();
-            Console.WriteLine($"templateFileArray has {templateFileArray.Length} templates");
 
             if (templateFileArray.Length == 0) { 
                 throw new Exception("No templates found.");
@@ -74,23 +94,24 @@ namespace MadlibBot
                 chosenIndex = generator.Next(0, templateFileArray.Length);
             } 
 
-            Console.WriteLine($"chosenIndex = {chosenIndex}");
-            Console.WriteLine($"Chosen file path = {templateFileArray[chosenIndex].FullName}");
-
             string fileContent = File.ReadAllText(templateFileArray[chosenIndex].FullName);
-            JObject wholeFile = JObject.Parse(fileContent);
-            JArray stories = (JArray) wholeFile["data"]["stories"];
 
-            Console.WriteLine($"fileContent = {stories}");
-
-            MadLibStoryTemplate template = stories.FirstOrDefault().ToObject<MadLibStoryTemplate>();
-            //After cleaning up json template files:
-            //MadLibStoryTemplate template = JsonConvert.DeserializeObject<MadLibStoryTemplate>(fileContent);
+            MadLibStoryTemplate template = JsonConvert.DeserializeObject<MadLibStoryTemplate>(fileContent);
             
-            Console.WriteLine($"template is null = {template is null}");
-
             return template;
         }
+
+    // TODO Either ask user to pick a genre, or always do random from available list
+    // For now, return "Adventure" for dev
+    private static string GetMadlibGenre()
+    {
+        return "Adventure";
+    }
+
+    private static List<string> GetExamplesForBlankType()
+    {
+        return ["ex1", "ex2"];
+    }
 
     private static void InitializationChecks()
     {
