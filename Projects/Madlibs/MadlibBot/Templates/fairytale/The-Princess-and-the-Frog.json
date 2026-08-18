@@ -1,37 +1,20 @@
 {
-  "status": "ok",
-  "error": null,
-  "data": {
-    "stories": [
-      {
-        "title": "The Princess and the Frog",
-        "template": "In a {adjective} kingdom, there lived a {adjective} princess named {name}. One day, she kissed a {adjective} {animal} and it turned into a {adjective} {noun}! Together they {past_verb} to the {adjective} castle and ate {number} {adjective} {plural_noun}.",
-        "blanks": [
-          { "id": 1, "type": "adjective", "label": "Adjective" },
-          { "id": 2, "type": "adjective", "label": "Adjective" },
-          { "id": 3, "type": "name", "label": "Name" },
-          { "id": 4, "type": "adjective", "label": "Adjective" },
-          { "id": 5, "type": "animal", "label": "Animal" },
-          { "id": 6, "type": "adjective", "label": "Adjective" },
-          { "id": 7, "type": "noun", "label": "Noun" },
-          { "id": 8, "type": "past_verb", "label": "Verb (Past Tense)" },
-          { "id": 9, "type": "adjective", "label": "Adjective" },
-          { "id": 10, "type": "number", "label": "Number" },
-          { "id": 11, "type": "adjective", "label": "Adjective" },
-          { "id": 12, "type": "plural_noun", "label": "Plural Noun" }
-        ],
-        "blankCount": 12,
-        "category": "fairytale"
-      }
-    ],
-    "count": 1,
-    "category": "random",
-    "html": "<html><head><title>Mad Libs</title><style>body {font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: 0 auto;}h1 {text-align: center; color: #E91E63;}.story-card {background: #fff; border: 2px solid #E91E63; padding: 25px; margin: 25px 0; border-radius: 15px;}.title {font-size: 24px; font-weight: bold; color: #E91E63; margin-bottom: 20px;}.blanks-section {background: #FCE4EC; padding: 20px; border-radius: 10px; margin-bottom: 20px;}.blanks-section h3 {margin-top: 0;}.blank-item {margin: 10px 0; display: flex; align-items: center;}.blank-label {min-width: 50px; font-weight: bold;}.blank-type {color: #666; margin-left: 10px;}.blank-input {flex: 1; padding: 8px; border: 1px solid #E91E63; border-radius: 5px; margin-left: 10px;}.story-template {line-height: 2; font-size: 16px;}.blank-marker {background: #E91E63; color: white; padding: 2px 8px; border-radius: 3px; font-weight: bold;}</style></head><body><h1>Mad Libs</h1><div class='story-card'><div class='title'>The Princess and the Frog</div><div class='blanks-section'><h3>Fill in the blanks:</h3><div class='blank-item'><span class='blank-label'>1.</span><span class='blank-type'>Adjective</span><input type='text' class='blank-input' placeholder='Enter adjective'></div><div class='blank-item'><span class='blank-label'>2.</span><span class='blank-type'>Adjective</span><input type='text' class='blank-input' placeholder='Enter adjective'></div><div class='blank-item'><span class='blank-label'>3.</span><span class='blank-type'>Name</span><input type='text' class='blank-input' placeholder='Enter name'></div><div class='blank-item'><span class='blank-label'>4.</span><span class='blank-type'>Adjective</span><input type='text' class='blank-input' placeholder='Enter adjective'></div><div class='blank-item'><span class='blank-label'>5.</span><span class='blank-type'>Animal</span><input type='text' class='blank-input' placeholder='Enter animal'></div><div class='blank-item'><span class='blank-label'>6.</span><span class='blank-type'>Adjective</span><input type='text' class='blank-input' placeholder='Enter adjective'></div><div class='blank-item'><span class='blank-label'>7.</span><span class='blank-type'>Noun</span><input type='text' class='blank-input' placeholder='Enter noun'></div><div class='blank-item'><span class='blank-label'>8.</span><span class='blank-type'>Verb (Past Tense)</span><input type='text' class='blank-input' placeholder='Enter verb (past tense)'></div><div class='blank-item'><span class='blank-label'>9.</span><span class='blank-type'>Adjective</span><input type='text' class='blank-input' placeholder='Enter adjective'></div><div class='blank-item'><span class='blank-label'>10.</span><span class='blank-type'>Number</span><input type='text' class='blank-input' placeholder='Enter number'></div><div class='blank-item'><span class='blank-label'>11.</span><span class='blank-type'>Adjective</span><input type='text' class='blank-input' placeholder='Enter adjective'></div><div class='blank-item'><span class='blank-label'>12.</span><span class='blank-type'>Plural Noun</span><input type='text' class='blank-input' placeholder='Enter plural noun'></div></div><div class='story-template'>In a <span class='blank-marker'>1</span> kingdom, there lived a <span class='blank-marker'>2</span> princess named <span class='blank-marker'>3</span>. One day, she kissed a <span class='blank-marker'>4</span> <span class='blank-marker'>5</span> and it turned into a <span class='blank-marker'>6</span> <span class='blank-marker'>7</span>! Together they <span class='blank-marker'>8</span> to the <span class='blank-marker'>9</span> castle and ate <span class='blank-marker'>10</span> <span class='blank-marker'>11</span> <span class='blank-marker'>12</span>.</div></div></body></html>",
-    "image": {
-      "imageName": "bc9bd434-1f27-4b4d-ba0d-29edd2b9dea2_madlibs.png",
-      "format": ".png",
-      "downloadURL": "https://storage.googleapis.com/apiverve/APIData/madlibs/bc9bd434-1f27-4b4d-ba0d-29edd2b9dea2_madlibs.png?GoogleAccessId=635500398038-compute%40developer.gserviceaccount.com&Expires=1780523145&Signature=ryI2RknQZSF141gpvh9cUphtrCFnLyujLdGfP%2Fe6C1Wa3atO80RCewfdbS95G1QLo5UsSSIfmUA6ezhqP45LfCZahMb0rwAIsd%2Fv1KoW26qNY1Oe7ATHNMtK4FLcdWS2dolIhC6Dor4vtNuqfVVfcU7qWJE5fr8ZKtsMKgoe%2BYsDJQWz6POtx2wn1p8xtvnSRBOMNoN8nMQdCY2GNJ6VdOI1Jscw%2FV%2FP1bLMjuRqw%2BSGlJqhvlt86JmbZOU5bEPAykvMX0xhcTGaxsCehk%2Fj0TLudMQs2qI3J4tTBc0biAiJPGkProrH7MztA0WoP5WGNjZ9SnY232oQCJhv4FT%2Fcg%3D%3D",
-      "expires": 1780523145286
-    }
-  }
+  "title": "The Princess and the Frog",
+  "template": "In a {adjective} kingdom, there lived a {adjective} princess named {name}. One day, she kissed a {adjective} {animal} and it turned into a {adjective} {noun}! Together they {past_verb} to the {adjective} castle and ate {number} {adjective} {plural_noun}.",
+  "blanks": [
+    { "id": 1, "type": "adjective", "label": "Adjective" },
+    { "id": 2, "type": "adjective", "label": "Adjective" },
+    { "id": 3, "type": "name", "label": "Name" },
+    { "id": 4, "type": "adjective", "label": "Adjective" },
+    { "id": 5, "type": "animal", "label": "Animal" },
+    { "id": 6, "type": "adjective", "label": "Adjective" },
+    { "id": 7, "type": "noun", "label": "Noun" },
+    { "id": 8, "type": "past_verb", "label": "Verb (Past Tense)" },
+    { "id": 9, "type": "adjective", "label": "Adjective" },
+    { "id": 10, "type": "number", "label": "Number" },
+    { "id": 11, "type": "adjective", "label": "Adjective" },
+    { "id": 12, "type": "plural_noun", "label": "Plural Noun" }
+  ],
+  "blankCount": 12,
+  "category": "fairytale"
 }
