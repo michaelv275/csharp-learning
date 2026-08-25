@@ -11,9 +11,6 @@ Random Word Form: A popular, free API (https://random-word-form.herokuapp.com/ra
 Random Word API (herokuapp): A simple API designed for fetching random words, often used to create combinations.
 Faker (Word API): Part of the Faker library, this provides a method to generate a random adjective, noun, or verb. [1, 2, 3, 4, 5]
 
-Create a method that that takes a MadlibBlank object and looks at its type property. Then grabs a .json file matching that type from the 'words' folder
-and outputs "Enter a <TYPE> ex: (top 3 examples from file)"
-
 # Example Game
 
 1. Build human players. Caveman = bot
@@ -30,14 +27,12 @@ and outputs "Enter a <TYPE> ex: (top 3 examples from file)"
 
 # Last time
 
-1. Built stubs for methods getting user selsected templates
-2. AddedMAdLibResponse List to Player object to contain answers
-3. Loop through blanks and ask each user to fill in response
+1. Listed all genres for templates
+2. Implemented random selection and validation
+3. Fetched template matching chosen genres
 
 # To Do
 
-1. Create a method that that takes a MadlibBlank object and looks at its type property. Then grabs a .json file matching that type from the 'words' folder and outputs "Enter a <TYPE> ex: (top 3 examples from file)"
-2. Todo: GetMadLibGenre(), create enum models for different template types
-3. Todo: GetExamplesForBlankType()
-4. Brainrot boogabot's word list and add dumb slang to its options
-5. Print all stories for each player, and loop through available players - booga bot and ask to vote. Each human player can vote. If they vote for themselves, shame them publicly.
+1. TODO: Create a method that that takes a MadlibBlank object and looks at its type property. Then grabs a .json file matching that type from the 'words' folder and outputs "Enter a <TYPE> ex: (top 3 examples from file)" GetExamplesForBlankType()
+2. TODO: Cavemanify the prompts from last session
+3. Print all stories for each player, and loop through available players - booga bot and ask to vote. Each human player can vote. If they vote for themselves, shame them publicly.

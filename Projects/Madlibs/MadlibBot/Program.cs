@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Madlibs.Utilities;
+using MadlibBot.Enums;
 
 namespace MadlibBot
 {
@@ -20,13 +21,14 @@ namespace MadlibBot
                 Console.WriteLine($"Player: {player.Name}");
             }
 
-            string madlibGenre = GetMadlibGenre();
-            MadLibStoryTemplate adventureTemplate = GetTemplate(madlibGenre);
-
-            Console.WriteLine($"The {adventureTemplate.Title} template has {adventureTemplate.BlankCount} blanks");
+            MadLibGenres madlibGenre = GetMadlibGenre();
+            Console.WriteLine($"You selected {madlibGenre}");
+            
+            MadLibStoryTemplate storyTemplate = GetTemplate(madlibGenre);
+            Console.WriteLine($"The {storyTemplate.Title} template has {storyTemplate.BlankCount} blanks");
 
             int testIndex = 0;
-            foreach (MadLibBlank blank in adventureTemplate.Blanks)
+            foreach (MadLibBlank blank in storyTemplate.Blanks)
             {
                 List<string> examples = GetExamplesForBlankType();
                 foreach (Player currentCaveman in gamePlayers)
@@ -43,10 +45,12 @@ namespace MadlibBot
                 }
             }
 
-            foreach(Player test in gamePlayers)
+            foreach (Player test in gamePlayers)
             {
                 Console.WriteLine($"{test.Name} entered: {string.Join(',', test.MadLibResponse)}");
             }
+            
+
 
             //Get user input for all blanks from template
             //Display the story with each users choices for "blanks"
@@ -77,9 +81,10 @@ namespace MadlibBot
         }
 
         // Get a template object for a given category
-        private static MadLibStoryTemplate? GetTemplate(string category)
+        private static MadLibStoryTemplate? GetTemplate(MadLibGenres category)
         {
-            DirectoryInfo categoryDirectory = new DirectoryInfo(Path.Join(_templateFolder.FullName, category));
+            string categoryName = category.ToString();
+            DirectoryInfo categoryDirectory = new DirectoryInfo(Path.Join(_templateFolder.FullName, categoryName));
             FileInfo[] templateFileArray = categoryDirectory.GetFiles();
 
             if (templateFileArray.Length == 0) { 
@@ -101,11 +106,10 @@ namespace MadlibBot
             return template;
         }
 
-    // TODO Either ask user to pick a genre, or always do random from available list
-    // For now, return "Adventure" for dev
-    private static string GetMadlibGenre()
+    private static MadLibGenres GetMadlibGenre()
     {
-        return "Adventure";
+        MadLibGenres selectedGenre = ConsoleUtility.GetUserSelection(EnumUtility.GetValues<MadLibGenres>());
+        return selectedGenre;
     }
 
     private static List<string> GetExamplesForBlankType()

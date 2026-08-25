@@ -1,4 +1,9 @@
 using System.Text;
+using System.ComponentModel;
+using System.Reflection;
+using System.Runtime.Serialization;
+using MadlibBot.Enums;
+using System.Text.RegularExpressions;
 
 namespace Madlibs.Utilities
 {
@@ -81,6 +86,16 @@ namespace Madlibs.Utilities
             return userValue;
         }
 
+        private static int GetIntInputFromUser(string prompt)
+        {
+            WriteColored($"\n{prompt}", ConsoleColor.Yellow);
+            bool isInputValid = int.TryParse(Console.ReadLine().Trim(), out int inputNumber);
+
+            return isInputValid && inputNumber >= 0
+                ? inputNumber
+                : -1;
+        }
+
         // string userNoun = GetUserInput("Enter a noun");
 
         public static string? GetUserInput(string prompt)
@@ -91,6 +106,35 @@ namespace Madlibs.Utilities
 
             return Console.ReadLine();
 
+        }
+
+        public static T? GetUserSelection<T>(IEnumerable<T> options, string prompt = "Select 1 of the available options") where T : Enum
+        {
+            foreach (T option in options) {
+                int underlyingValue = Convert.ToInt32(option);
+
+                Console.WriteLine($"{underlyingValue}: {option}");
+            }
+            Console.WriteLine("99: Random");
+
+            int underlyingGenreKey = GetIntInputFromUser(prompt);
+
+            if (underlyingGenreKey < 0  || (underlyingGenreKey > options.Count() - 1 && underlyingGenreKey != 99))
+            {
+                WriteColoredLine("Invalid selection. Please try again.", ConsoleColor.Red);
+                return GetUserSelection(options, prompt);
+            }
+
+            if (underlyingGenreKey == 99)
+            {
+                Random random = new Random();
+                int randomIndex = random.Next(0, options.Count());
+                return options.ElementAt(randomIndex);
+            }
+
+            T? selectedOption = options.ElementAtOrDefault(underlyingGenreKey);
+
+            return selectedOption;
         }
     }
     
