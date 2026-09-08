@@ -1,9 +1,4 @@
 using System.Text;
-using System.ComponentModel;
-using System.Reflection;
-using System.Runtime.Serialization;
-using MadlibBot.Enums;
-using System.Text.RegularExpressions;
 
 namespace Madlibs.Utilities
 {
@@ -65,7 +60,6 @@ namespace Madlibs.Utilities
             //2. Store initial user input (Console.ReadLine())
             string userInput = Console.ReadLine();
 
-
             //5. If valid, accept and return
             bool isInputValid = false;
 
@@ -108,9 +102,10 @@ namespace Madlibs.Utilities
 
         }
 
-        public static T? GetUserSelection<T>(IEnumerable<T> options, string prompt = "Select 1 of the available options") where T : Enum
+        public static T? GetUserSelection<T>(IEnumerable<T> options, string prompt = "Select 1 of the available options: ") where T : Enum
         {
-            foreach (T option in options) {
+            foreach (T option in options)
+            {
                 int underlyingValue = Convert.ToInt32(option);
 
                 Console.WriteLine($"{underlyingValue}: {option}");
@@ -119,7 +114,7 @@ namespace Madlibs.Utilities
 
             int underlyingGenreKey = GetIntInputFromUser(prompt);
 
-            if (underlyingGenreKey < 0  || (underlyingGenreKey > options.Count() - 1 && underlyingGenreKey != 99))
+            if (underlyingGenreKey < 0 || (underlyingGenreKey > options.Count() - 1 && underlyingGenreKey != 99))
             {
                 WriteColoredLine("Invalid selection. Please try again.", ConsoleColor.Red);
                 return GetUserSelection(options, prompt);
@@ -137,6 +132,4 @@ namespace Madlibs.Utilities
             return selectedOption;
         }
     }
-    
-    
 }
