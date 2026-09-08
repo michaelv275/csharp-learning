@@ -51,7 +51,7 @@ namespace MadlibBot
 
             //Test output 1 story
             Player player1 = gamePlayers[0];
-            string player1Story = storyTemplate.Template;
+            player1.MadlibStory = storyTemplate.Template;
             Console.WriteLine($"Story: {storyTemplate.Title}: ");
 
             Console.WriteLine($"Player has {player1.MadLibResponse.Count} responses");
@@ -60,14 +60,16 @@ namespace MadlibBot
             foreach (string player1Response in player1.MadLibResponse)
             {
                 MadLibBlank blank = storyTemplate.Blanks[blankIndex];
-                int templateCursorIndex = player1Story.IndexOf($"{{{blank.Type}}}");
-                player1Story = player1Story.ReplaceFirst($"{{{blank.Type}}}", player1Response);
+                int templateCursorIndex = player1.MadlibStory.IndexOf($"{{{blank.Type}}}");
+
+                // Actually replace the blank in the story for the user
+                player1.MadlibStory = player1.MadlibStory.ReplaceFirst($"{{{blank.Type}}}", player1Response);
 
                 blankIndex++;
                 templateCursorIndex += blank.Type.Length + 2;
             }
 
-            Console.WriteLine($"Story = {player1Story}");
+            Console.WriteLine($"Story = {player1.MadlibStory}");
 
             //Get user input for all blanks from template
             //Display the story with each users choices for "blanks"
