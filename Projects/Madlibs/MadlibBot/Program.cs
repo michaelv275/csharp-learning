@@ -1,8 +1,9 @@
-﻿using MadLibBot.Models;
+﻿using MadlibBot.Enums;
+using MadlibBot.Utilities;
+using MadLibBot.Models;
+using Madlibs.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Madlibs.Utilities;
-using MadlibBot.Enums;
 
 namespace MadlibBot
 {
@@ -10,12 +11,14 @@ namespace MadlibBot
     {
         private static HttpClient _apiClient;
         private static DirectoryInfo _templateFolder;
+        private static string _sourceDirectory = @"C:\Dispel\Dispel-repos\csharp-learning";
 
         static void Main(string[] _1)
         {
-            _templateFolder = new DirectoryInfo($"/Users/sophiapache/Documents/csharp-learning/Projects/Madlibs/MadlibBot/Templates/");
+            _templateFolder = new DirectoryInfo($"{_sourceDirectory}/Projects/Madlibs/MadlibBot/Templates/");
 
             List<Player> gamePlayers = GameIntroduction();
+
             foreach (Player player in gamePlayers)
             {
                 Console.WriteLine($"Player: {player.Name}");
@@ -23,10 +26,10 @@ namespace MadlibBot
 
             MadLibGenres madlibGenre = GetMadlibGenre();
             Console.WriteLine($"You selected {madlibGenre}");
-            
+
             MadLibStoryTemplate storyTemplate = GetTemplate(madlibGenre);
             Console.WriteLine($"The {storyTemplate.Title} template has {storyTemplate.BlankCount} blanks");
-            
+
             Dictionary<string, List<string>> examples = GetExamplesForBlankType(storyTemplate.Blanks);
 
             int testIndex = 0;
@@ -53,45 +56,22 @@ namespace MadlibBot
 
             Console.WriteLine($"Player has {player1.MadLibResponse.Count} responses");
 
-            int templateCursorIndex = 0;
             int blankIndex = 0;
-            while (templateCursorIndex < player1Story.Length)
+            foreach (string player1Response in player1.MadLibResponse)
             {
-                foreach (MadLibBlank blank in storyTemplate.Blanks)
-                {
-                    string tempType = blank.Type;
-                    templateCursorIndex = player1Story.IndexOf($"{{{blank.Type}}}");
-                    string player1Response = player1.MadLibResponse[blankIndex];
-                    ReplaceFirst(player1Story, $"{{{blank.Type}}}", player1Response);
+                MadLibBlank blank = storyTemplate.Blanks[blankIndex];
+                int templateCursorIndex = player1Story.IndexOf($"{{{blank.Type}}}");
+                player1Story = player1Story.ReplaceFirst($"{{{blank.Type}}}", player1Response);
 
-                    blankIndex++;
-                    templateCursorIndex += tempType.Length + 2;
-                }
+                blankIndex++;
+                templateCursorIndex += blank.Type.Length + 2;
             }
-            
 
             Console.WriteLine($"Story = {player1Story}");
-
 
             //Get user input for all blanks from template
             //Display the story with each users choices for "blanks"
         }
-
-        private static string ReplaceFirst(string text, string search, string replace)
-        {
-            // Find the index of the first occurrence
-            int pos = text.IndexOf(search);
-            
-            // If the search string isn't found, return the original text
-            if (pos < 0)
-            {
-                return text;
-            }
-            
-            // Remove the old substring and insert the new one
-            return text.Remove(pos, search.Length).Insert(pos, replace);
-        }
-
 
         private static List<Player> GameIntroduction()
         {
@@ -102,17 +82,18 @@ namespace MadlibBot
 
             // Ask how many human players are playing
             int playerCount = ConsoleUtility.GetPositiveIntInputFromUser("how many cavemen ooga booga");
-            List<Player> playerList = new List<Player>();
+            List<Player> playerList = [];
+
             for (int i = 0; i < playerCount; i++)
             {
-                string cavemanName = ConsoleUtility.GetUserInput("what your name? hit enter when done new players.");
+                string cavemanName = ConsoleUtility.GetUserInput("\nwhat your name? hit enter when done new players.");
                 // Validate string input, make sure not null or empty. Write function
                 playerList.Add(new Player(cavemanName));
             }
 
             playerList.Add(new Player("BoogaBot"));
 
-            ConsoleUtility.WriteColoredLine("all players added. let play", ConsoleColor.Yellow);
+            ConsoleUtility.WriteColoredLine("\nall players added. let play", ConsoleColor.Yellow);
             return playerList;
         }
 
@@ -123,22 +104,25 @@ namespace MadlibBot
             DirectoryInfo categoryDirectory = new DirectoryInfo(Path.Join(_templateFolder.FullName, categoryName));
             FileInfo[] templateFileArray = categoryDirectory.GetFiles();
 
-            if (templateFileArray.Length == 0) { 
+            if (templateFileArray.Length == 0)
+            {
                 throw new Exception("No templates found.");
-            };
+            }
+            ;
 
             int chosenIndex = 0;
 
             // See how many files are in array
-            if (templateFileArray.Length > 1) {
+            if (templateFileArray.Length > 1)
+            {
                 Random generator = new Random();
                 chosenIndex = generator.Next(0, templateFileArray.Length);
-            } 
+            }
 
             string fileContent = File.ReadAllText(templateFileArray[chosenIndex].FullName);
 
             MadLibStoryTemplate template = JsonConvert.DeserializeObject<MadLibStoryTemplate>(fileContent);
-            
+
             return template;
         }
 
@@ -150,9 +134,9 @@ namespace MadlibBot
 
         private static Dictionary<string, List<string>> GetExamplesForBlankType(List<MadLibBlank> blanksList)
         {
-            Dictionary<string, List<string>> blankExamples = new Dictionary<string, List<string>>();
-            
-            foreach(MadLibBlank blank in blanksList)
+            Dictionary<string, List<string>> blankExamples = [];
+
+            foreach (MadLibBlank blank in blanksList)
             {
                 if (!blankExamples.ContainsKey(blank.Type))
                 {
@@ -165,7 +149,7 @@ namespace MadlibBot
 
         private static void InitializationChecks()
         {
-            string categoryFolderPath = $"/Users/sophiapache/Documents/csharp-learning/Projects/Madlibs/MadlibBot/Templates/";
+            string categoryFolderPath = $"{_sourceDirectory}/Projects/Madlibs/MadlibBot/Templates/";
             bool doesFolderExist = Directory.Exists(categoryFolderPath);
 
             if (doesFolderExist)
@@ -184,7 +168,7 @@ namespace MadlibBot
 
         private static List<string> GetExamplesFromFile(string blankType)
         {
-            string filePath = $"/Users/sophiapache/Documents/csharp-learning/Projects/Madlibs/MadlibBot/Words/{blankType}.json";
+            string filePath = $"{_sourceDirectory}/Projects/Madlibs/MadlibBot/Words/{blankType}.json";
             bool doesFileExist = File.Exists(filePath);
 
             if (doesFileExist)
