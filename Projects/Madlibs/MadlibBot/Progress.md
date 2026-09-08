@@ -27,12 +27,12 @@ Faker (Word API): Part of the Faker library, this provides a method to generate 
 
 # Last time
 
-1. Listed all genres for templates
-2. Implemented random selection and validation
-3. Fetched template matching chosen genres
+1. Looped through player responses and created story with replacements
+2. Created examples logic
 
 # To Do
 
-1. TODO: Create a method that that takes a MadlibBlank object and looks at its type property. Then grabs a .json file matching that type from the 'words' folder and outputs "Enter a <TYPE> ex: (top 3 examples from file)" GetExamplesForBlankType()
-2. TODO: Cavemanify the prompts from last session
-3. Print all stories for each player, and loop through available players - booga bot and ask to vote. Each human player can vote. If they vote for themselves, shame them publicly.
+1. Replace tokens in all players stories
+2. Set caveman responses automatically
+3. TODO: Cavemanify the prompts from last session
+4. Print all stories for each player, and loop through available players - booga bot and ask to vote. Each human player can vote. If they vote for themselves, shame them publicly.
