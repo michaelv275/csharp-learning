@@ -26,14 +26,15 @@ namespace MadlibBot
             
             MadLibStoryTemplate storyTemplate = GetTemplate(madlibGenre);
             Console.WriteLine($"The {storyTemplate.Title} template has {storyTemplate.BlankCount} blanks");
+            
+            Dictionary<string, List<string>> examples = GetExamplesForBlankType(storyTemplate.Blanks);
 
             int testIndex = 0;
             foreach (MadLibBlank blank in storyTemplate.Blanks)
             {
-                List<string> examples = GetExamplesForBlankType();
                 foreach (Player currentCaveman in gamePlayers)
                 {
-                    ConsoleUtility.WriteColoredLine($"caveman {currentCaveman.Name} say {blank.Type} (ex. {string.Join(',', examples)})", ConsoleColor.Yellow);
+                    ConsoleUtility.WriteColoredLine($"caveman {currentCaveman.Name} say {blank.Type} (ex. {string.Join(", ", examples[blank.Type])})", ConsoleColor.Yellow);
                     currentCaveman.MadLibResponse.Add(ConsoleUtility.GetSecureUserInput());
                 }
 
@@ -45,15 +46,50 @@ namespace MadlibBot
                 }
             }
 
-            foreach (Player test in gamePlayers)
+            //Test output 1 story
+            Player player1 = gamePlayers[0];
+            string player1Story = storyTemplate.Template;
+            Console.WriteLine($"Story: {storyTemplate.Title}: ");
+
+            Console.WriteLine($"Player has {player1.MadLibResponse.Count} responses");
+
+            int templateCursorIndex = 0;
+            int blankIndex = 0;
+            while (templateCursorIndex < player1Story.Length)
             {
-                Console.WriteLine($"{test.Name} entered: {string.Join(',', test.MadLibResponse)}");
+                foreach (MadLibBlank blank in storyTemplate.Blanks)
+                {
+                    string tempType = blank.Type;
+                    templateCursorIndex = player1Story.IndexOf($"{{{blank.Type}}}");
+                    string player1Response = player1.MadLibResponse[blankIndex];
+                    ReplaceFirst(player1Story, $"{{{blank.Type}}}", player1Response);
+
+                    blankIndex++;
+                    templateCursorIndex += tempType.Length + 2;
+                }
             }
             
+
+            Console.WriteLine($"Story = {player1Story}");
 
 
             //Get user input for all blanks from template
             //Display the story with each users choices for "blanks"
+        }
+
+        private static string ReplaceFirst(string text, string search, string replace)
+        {
+            // Find the index of the first occurrence
+            int pos = text.IndexOf(search);
+            
+            // If the search string isn't found, return the original text
+            if (pos < 0)
+            {
+                return text;
+            }
+            
+            // Remove the old substring and insert the new one
+            return text.Remove(pos, search.Length).Insert(pos, replace);
         }
 
 
@@ -106,36 +142,60 @@ namespace MadlibBot
             return template;
         }
 
-    private static MadLibGenres GetMadlibGenre()
-    {
-        MadLibGenres selectedGenre = ConsoleUtility.GetUserSelection(EnumUtility.GetValues<MadLibGenres>());
-        return selectedGenre;
-    }
-
-    private static List<string> GetExamplesForBlankType()
-    {
-        return ["ex1", "ex2"];
-    }
-
-    private static void InitializationChecks()
-    {
-        string categoryFolderPath = $"/Users/sophiapache/Documents/csharp-learning/Projects/Madlibs/MadlibBot/Templates/";
-        bool doesFolderExist = Directory.Exists(categoryFolderPath);
-
-        if (doesFolderExist)
+        private static MadLibGenres GetMadlibGenre()
         {
-            // Pick random file in that folder
-            string[] files = Directory.GetFiles(categoryFolderPath, "*.json");
-            string randomFile = files[new Random().Next(files.Length)];
-            JObject jsonText = JObject.Parse(File.ReadAllText(randomFile));
+            MadLibGenres selectedGenre = ConsoleUtility.GetUserSelection(EnumUtility.GetValues<MadLibGenres>());
+            return selectedGenre;
+        }
 
-            // Deserialize
-            MadLibStoryTemplate deserializedJson = JsonConvert.DeserializeObject<MadLibStoryTemplate>(jsonText.ToString());
-            Console.WriteLine(deserializedJson);
+        private static Dictionary<string, List<string>> GetExamplesForBlankType(List<MadLibBlank> blanksList)
+        {
+            Dictionary<string, List<string>> blankExamples = new Dictionary<string, List<string>>();
+            
+            foreach(MadLibBlank blank in blanksList)
+            {
+                if (!blankExamples.ContainsKey(blank.Type))
+                {
+                    blankExamples[blank.Type] = GetExamplesFromFile(blank.Type);
+                }
+            }
 
+            return blankExamples;
+        }
+
+        private static void InitializationChecks()
+        {
+            string categoryFolderPath = $"/Users/sophiapache/Documents/csharp-learning/Projects/Madlibs/MadlibBot/Templates/";
+            bool doesFolderExist = Directory.Exists(categoryFolderPath);
+
+            if (doesFolderExist)
+            {
+                // Pick random file in that folder
+                string[] files = Directory.GetFiles(categoryFolderPath, "*.json");
+                string randomFile = files[new Random().Next(files.Length)];
+                JObject jsonText = JObject.Parse(File.ReadAllText(randomFile));
+
+                // Deserialize
+                MadLibStoryTemplate deserializedJson = JsonConvert.DeserializeObject<MadLibStoryTemplate>(jsonText.ToString());
+                Console.WriteLine(deserializedJson);
+
+            }
+        }
+
+        private static List<string> GetExamplesFromFile(string blankType)
+        {
+            string filePath = $"/Users/sophiapache/Documents/csharp-learning/Projects/Madlibs/MadlibBot/Words/{blankType}.json";
+            bool doesFileExist = File.Exists(filePath);
+
+            if (doesFileExist)
+            {
+                JArray fileContents = JArray.Parse(File.ReadAllText(filePath));
+                List<string> wordList = fileContents.ToObject<List<string>>();
+                return wordList.GetRange(0, 3);
+            }
+
+            return [];
         }
     }
-    
-}
 }
 
