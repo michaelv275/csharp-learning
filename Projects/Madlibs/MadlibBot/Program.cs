@@ -11,7 +11,7 @@ namespace MadlibBot
     {
         private static HttpClient _apiClient;
         private static DirectoryInfo _templateFolder;
-        private static string _sourceDirectory = @"C:\Dispel\Dispel-repos\csharp-learning";
+        private static string _sourceDirectory = @"/Users/sophiapache/Documents/csharp-learning";
 
         static void Main(string[] _1)
         {
@@ -21,14 +21,20 @@ namespace MadlibBot
 
             foreach (Player player in gamePlayers)
             {
-                Console.WriteLine($"Player: {player.Name}");
+                ConsoleUtility.WriteColored($"\nPlayer: ", ConsoleColor.Yellow);
+                Console.Write(player.Name);
             }
 
+            Console.WriteLine();
+
             MadLibGenres madlibGenre = GetMadlibGenre();
-            Console.WriteLine($"You selected {madlibGenre}");
+            ConsoleUtility.WriteColored($"You selected: ", ConsoleColor.Yellow);
+            Console.Write($"{madlibGenre}");
+
+            Console.WriteLine();
 
             MadLibStoryTemplate storyTemplate = GetTemplate(madlibGenre);
-            Console.WriteLine($"The {storyTemplate.Title} template has {storyTemplate.BlankCount} blanks");
+            Console.WriteLine($"\nThe {storyTemplate.Title} template has {storyTemplate.BlankCount} blanks");
 
             Dictionary<string, List<string>> examples = GetExamplesForBlankType(storyTemplate.Blanks);
 
@@ -49,30 +55,16 @@ namespace MadlibBot
                 }
             }
 
-            //Test output 1 story
-            Player player1 = gamePlayers[0];
-            player1.MadlibStory = storyTemplate.Template;
-            Console.WriteLine($"Story: {storyTemplate.Title}: ");
+            CreateStories(storyTemplate, gamePlayers);
 
-            Console.WriteLine($"Player has {player1.MadLibResponse.Count} responses");
-
-            int blankIndex = 0;
-            foreach (string player1Response in player1.MadLibResponse)
+            foreach (Player player in gamePlayers)
             {
-                MadLibBlank blank = storyTemplate.Blanks[blankIndex];
-                int templateCursorIndex = player1.MadlibStory.IndexOf($"{{{blank.Type}}}");
-
-                // Actually replace the blank in the story for the user
-                player1.MadlibStory = player1.MadlibStory.ReplaceFirst($"{{{blank.Type}}}", player1Response);
-
-                blankIndex++;
-                templateCursorIndex += blank.Type.Length + 2;
+                ConsoleUtility.WriteColoredLine($"{storyTemplate.Title} story for {player.Name} = ", ConsoleColor.Yellow);
+                Console.WriteLine($"{player.MadlibStory}\n");
             }
 
-            Console.WriteLine($"Story = {player1.MadlibStory}");
-
-            //Get user input for all blanks from template
-            //Display the story with each users choices for "blanks"
+            VoteForBestStory(gamePlayers);
+            DetermineWinner(gamePlayers);
         }
 
         private static List<Player> GameIntroduction()
@@ -130,7 +122,7 @@ namespace MadlibBot
 
         private static MadLibGenres GetMadlibGenre()
         {
-            MadLibGenres selectedGenre = ConsoleUtility.GetUserSelection(EnumUtility.GetValues<MadLibGenres>());
+            MadLibGenres selectedGenre = ConsoleUtility.SelectEnumOption(EnumUtility.GetValues<MadLibGenres>());
             return selectedGenre;
         }
 
@@ -181,6 +173,85 @@ namespace MadlibBot
             }
 
             return [];
+        }
+
+        private static void CreateStories(MadLibStoryTemplate storyTemplate, List<Player> gamePlayers)
+        {
+            foreach (Player currentPlayer in gamePlayers)
+            {
+                currentPlayer.MadlibStory = storyTemplate.Template;
+
+                int blankIndex = 0;
+                foreach (string player1Response in currentPlayer.MadLibResponse)
+                {
+                    MadLibBlank blank = storyTemplate.Blanks[blankIndex];
+                    int templateCursorIndex = currentPlayer.MadlibStory.IndexOf($"{{{blank.Type}}}");
+
+                    // Actually replace the blank in the story for the user
+                    currentPlayer.MadlibStory = currentPlayer.MadlibStory.ReplaceFirst($"{{{blank.Type}}}", player1Response);
+
+                    blankIndex++;
+                    templateCursorIndex += blank.Type.Length + 2;
+                }
+            }
+
+        }
+        
+        private static void VoteForBestStory(List<Player> gamePlayers)
+        {
+            ConsoleUtility.WriteColoredLine("we vote nao.", ConsoleColor.Yellow);
+
+            foreach (Player currentPlayer in gamePlayers)
+            {
+                string voteForWinnerPrompt = $"{currentPlayer.Name}, OOGA! Tribe choose big booga caveman. Grunt number next ooga. Winner get mammoth.";
+                PrintPlayerAndIndex(gamePlayers);
+                int voteResponse = ConsoleUtility.GetIntInputFromUser(voteForWinnerPrompt, true);
+
+                if ((voteResponse < 0) || voteResponse > gamePlayers.Count)
+                {
+                    bool isResponseValid = false;
+
+                    while (!isResponseValid)
+                    {
+                        ConsoleUtility.WriteColoredLine("NO GOOD!!!!!", ConsoleColor.Red);
+
+                        voteResponse = ConsoleUtility.GetIntInputFromUser(voteForWinnerPrompt, true);
+
+                        isResponseValid = (voteResponse > 0) && voteResponse < gamePlayers.Count + 1;
+                    }
+                }
+
+                Console.WriteLine($"player chose number: {voteResponse}");
+                Console.WriteLine($"Which should be caveman: {gamePlayers[voteResponse - 1].Name}");
+                
+                gamePlayers[voteResponse - 1].Score++;
+            }
+        }
+
+        private static void PrintPlayerAndIndex(List<Player> gamePlayers)
+        {
+            for (int i = 1; i <= gamePlayers.Count; i++)
+            {
+                Console.WriteLine($"{i}: {gamePlayers[i - 1].Name}");
+            }
+        }
+
+        private static void DetermineWinner(List<Player> gamePlayers)
+        {
+            List<Player> sortedList = gamePlayers.OrderByDescending(p => p.Score).ToList();
+
+            foreach(Player currentPlayer in sortedList)
+            {
+                ConsoleUtility.WriteColoredLine($"{currentPlayer.Name} has {currentPlayer.Score} points.", ConsoleColor.Yellow);
+            }
+
+            List<Player> playersWhoTiedForFirst = gamePlayers.Where(p => p.Score == sortedList[0].Score && sortedList[0].Name != p.Name).ToList();
+
+            if (playersWhoTiedForFirst.Count > 0)
+            {
+                Console.WriteLine("Some cavemen tied. Fight to death");
+                //PLay rock paper scissors
+            }
         }
     }
 }

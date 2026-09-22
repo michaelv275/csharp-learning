@@ -80,10 +80,15 @@ namespace Madlibs.Utilities
             return userValue;
         }
 
-        private static int GetIntInputFromUser(string prompt)
+        public static int GetIntInputFromUser(string prompt, bool shouldObfuscateInput = false)
         {
             WriteColored($"\n{prompt}", ConsoleColor.Yellow);
-            bool isInputValid = int.TryParse(Console.ReadLine().Trim(), out int inputNumber);
+
+            string userInput = shouldObfuscateInput 
+                ? GetSecureUserInput()
+                : Console.ReadLine();
+
+            bool isInputValid = int.TryParse(userInput.Trim(), out int inputNumber);
 
             return isInputValid && inputNumber >= 0
                 ? inputNumber
@@ -102,7 +107,7 @@ namespace Madlibs.Utilities
 
         }
 
-        public static T? GetUserSelection<T>(IEnumerable<T> options, string prompt = "Select 1 of the available options: ") where T : Enum
+        public static T? SelectEnumOption<T>(IEnumerable<T> options, string prompt = "Select 1 of the available options: ") where T : Enum
         {
             foreach (T option in options)
             {
@@ -117,7 +122,7 @@ namespace Madlibs.Utilities
             if (underlyingGenreKey < 0 || (underlyingGenreKey > options.Count() - 1 && underlyingGenreKey != 99))
             {
                 WriteColoredLine("Invalid selection. Please try again.", ConsoleColor.Red);
-                return GetUserSelection(options, prompt);
+                return SelectEnumOption(options, prompt);
             }
 
             if (underlyingGenreKey == 99)
