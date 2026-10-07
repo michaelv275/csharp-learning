@@ -12,6 +12,10 @@ namespace MadlibBot
         private static HttpClient _apiClient;
         private static DirectoryInfo _templateFolder;
         private static string _sourceDirectory = @"/Users/sophiapache/Documents/csharp-learning";
+        private int _numberOfBoogaBots = 1;
+        private static Random _rndGenerator = new Random();
+        private static readonly string _boogaBotName = "BoogaBot";
+        
 
         static void Main(string[] _1)
         {
@@ -38,21 +42,27 @@ namespace MadlibBot
 
             Dictionary<string, List<string>> examples = GetExamplesForBlankType(storyTemplate.Blanks);
 
-            int testIndex = 0;
+            // int testIndex = 0;
             foreach (MadLibBlank blank in storyTemplate.Blanks)
             {
                 foreach (Player currentCaveman in gamePlayers)
                 {
+                    if (currentCaveman.Name == _boogaBotName)
+                    {
+                        currentCaveman.MadLibResponse.Add(GetExamplesFromFile(blank.Type, 1).FirstOrDefault());
+                        continue;
+                    }
+                    
                     ConsoleUtility.WriteColoredLine($"caveman {currentCaveman.Name} say {blank.Type} (ex. {string.Join(", ", examples[blank.Type])})", ConsoleColor.Yellow);
                     currentCaveman.MadLibResponse.Add(ConsoleUtility.GetSecureUserInput());
                 }
 
-                testIndex++;
+                // testIndex++;
 
-                if (testIndex >= 3)
-                {
-                    break;
-                }
+                // if (testIndex >= 3)
+                // {
+                //     break;
+                // }
             }
 
             CreateStories(storyTemplate, gamePlayers);
@@ -85,7 +95,7 @@ namespace MadlibBot
                 playerList.Add(new Player(cavemanName));
             }
 
-            playerList.Add(new Player("BoogaBot"));
+            playerList.Add(new Player(_boogaBotName));
 
             ConsoleUtility.WriteColoredLine("\nall players added. let play", ConsoleColor.Yellow);
             return playerList;
@@ -134,7 +144,7 @@ namespace MadlibBot
             {
                 if (!blankExamples.ContainsKey(blank.Type))
                 {
-                    blankExamples[blank.Type] = GetExamplesFromFile(blank.Type);
+                    blankExamples[blank.Type] = GetExamplesFromFile(blank.Type, 3);
                 }
             }
 
@@ -160,19 +170,31 @@ namespace MadlibBot
             }
         }
 
-        private static List<string> GetExamplesFromFile(string blankType)
+        private static List<string> GetExamplesFromFile(string blankType, int numberOfExamples)
         {
             string filePath = $"{_sourceDirectory}/Projects/Madlibs/MadlibBot/Words/{blankType}.json";
             bool doesFileExist = File.Exists(filePath);
+            List<string> selectedExamples = new List<string>();
 
             if (doesFileExist)
             {
                 JArray fileContents = JArray.Parse(File.ReadAllText(filePath));
                 List<string> wordList = fileContents.ToObject<List<string>>();
-                return wordList.GetRange(0, 3);
+                
+                int minNumber = 0;
+                int maxNumber = wordList.Count;
+                // loop and check for duplicates in index, if unique then add to list 
+                for (int i = 0; i < numberOfExamples; i++)
+                {
+                    int wordIndex = _rndGenerator.Next(minNumber, maxNumber);
+                    if (!selectedExamples.Contains(wordList[wordIndex]))
+                    {
+                        selectedExamples.Add(wordList[wordIndex]);
+                    }
+                }
             }
 
-            return [];
+            return selectedExamples;
         }
 
         private static void CreateStories(MadLibStoryTemplate storyTemplate, List<Player> gamePlayers)
@@ -203,6 +225,11 @@ namespace MadlibBot
 
             foreach (Player currentPlayer in gamePlayers)
             {
+                if (currentPlayer.Name == _boogaBotName)
+                {
+                    continue;
+                }
+                
                 string voteForWinnerPrompt = $"{currentPlayer.Name}, OOGA! Tribe choose big booga caveman. Grunt number next ooga. Winner get mammoth.";
                 PrintPlayerAndIndex(gamePlayers);
                 int voteResponse = ConsoleUtility.GetIntInputFromUser(voteForWinnerPrompt, true);
@@ -220,9 +247,6 @@ namespace MadlibBot
                         isResponseValid = (voteResponse > 0) && voteResponse < gamePlayers.Count + 1;
                     }
                 }
-
-                Console.WriteLine($"player chose number: {voteResponse}");
-                Console.WriteLine($"Which should be caveman: {gamePlayers[voteResponse - 1].Name}");
                 
                 gamePlayers[voteResponse - 1].Score++;
             }
@@ -240,17 +264,50 @@ namespace MadlibBot
         {
             List<Player> sortedList = gamePlayers.OrderByDescending(p => p.Score).ToList();
 
-            foreach(Player currentPlayer in sortedList)
+            foreach (Player currentPlayer in sortedList)
             {
-                ConsoleUtility.WriteColoredLine($"{currentPlayer.Name} has {currentPlayer.Score} points.", ConsoleColor.Yellow);
+                ConsoleUtility.WriteColoredLine($"\n{currentPlayer.Name} has {currentPlayer.Score} points.", ConsoleColor.Yellow);
             }
 
-            List<Player> playersWhoTiedForFirst = gamePlayers.Where(p => p.Score == sortedList[0].Score && sortedList[0].Name != p.Name).ToList();
+            List<Player> playersWhoTiedForFirst = gamePlayers.Where(p => p.Score == sortedList[0].Score).ToList();
 
-            if (playersWhoTiedForFirst.Count > 0)
+            if (playersWhoTiedForFirst.Count > 1)
             {
-                Console.WriteLine("Some cavemen tied. Fight to death");
-                //PLay rock paper scissors
+                ConsoleUtility.WriteColoredLine("\nSome cavemen tied. Fight to death. Me think number 1-100. Closest caveman win mammoth.", ConsoleColor.Yellow);
+                Player closestCaveman = null;
+                int secretNumber = _rndGenerator.Next(1, 101);
+
+                foreach(Player caveman in playersWhoTiedForFirst)
+                {
+                    caveman.TieBreakGuess = ConsoleUtility.GetIntInputFromUser($"Caveman {caveman.Name}, howl favorite number: ");
+
+                    if (closestCaveman is null)
+                    {
+                        closestCaveman = caveman;
+                    }
+                    else
+                    {
+                        int currentCavemanGuessDifference = Math.Abs(secretNumber - caveman.TieBreakGuess);
+                        int closestCavemanGuessDifference = Math.Abs(secretNumber - closestCaveman.TieBreakGuess);
+
+                        if (closestCavemanGuessDifference > currentCavemanGuessDifference)
+                        {
+                            closestCaveman = caveman;
+                        }
+
+                        if (closestCavemanGuessDifference == currentCavemanGuessDifference)
+                        {
+                            ConsoleUtility.WriteColoredLine($"No joke? How did you do that?. Crazy. Secret number was {secretNumber}. No mammoths for anyone", ConsoleColor.Red);
+                            return;
+                        }
+                    }
+                }
+
+                ConsoleUtility.WriteColoredLine($"\nConfrats caveman {closestCaveman.Name}. You get Mammoth!!!!", ConsoleColor.Green);
+            }
+            else
+            {
+                ConsoleUtility.WriteColoredLine($"\nConfrats caveman {sortedList[0].Name}. You get Mammoth!!!!", ConsoleColor.Green);
             }
         }
     }

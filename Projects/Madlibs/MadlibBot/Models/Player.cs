@@ -9,6 +9,7 @@ namespace MadLibBot.Models
         public List<string> MadLibResponse { get; set; }
 
         public string MadlibStory { get; set; }
+        public int TieBreakGuess { get; set; }
 
         public Player(string name)
         {

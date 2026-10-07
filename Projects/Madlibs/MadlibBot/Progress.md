@@ -27,15 +27,11 @@ Faker (Word API): Part of the Faker library, this provides a method to generate 
 
 # Last time
 
-1. Moved logic to new CreateStories function to fill in the template with the blanks
-2. Created new function VoteForBestStory to allow players to vote for their favorite stories and calculate score.
-3. Created new function DetermineWinner to look at the scores and see who had the most points and who tied.
+1. We added Boogabot random responses.
+2. When players tied, they had to choose random numbers.
 
 # To Do
 
-1. Fix bug when selecting story template. Noticed when going fast. Maybe when entering a wrong possibilty first?
-2. Set caveman responses automatically
-3. TODO: Cavemanify the prompts from last session
-4. Play rock paper scissors when tied for first
-5. Reorganize logic clean methods. Maybe move methods from Program.cs to other locations
-6. Clean up text output so it's all clear and no weird formatting
+1. Fix bug when selecting story template. Happens when entering a value then deleting and entering another value
+2. Reorganize logic clean methods. Maybe move methods from Program.cs to other locations
+3. Clean up text output so it's all clear and no weird formatting
